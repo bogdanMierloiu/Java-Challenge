@@ -20,20 +20,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/goToCriminalFilesAC}"
-                   th:classappend="${activePage == 'criminalFilesAC' ? 'selected' : ''}">Dosare cu autor cunoscut</a>
+                <a class="nav-link" th:href="@{/goToCriminalFilesAC}">Dosare cu autor cunoscut</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/goToCriminalFilesAN}"
-                   th:classappend="${activePage == 'criminalFilesAN' ? 'selected' : ''}">Dosare cu autor necunoscut</a>
+                >Dosare cu autor necunoscut</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/goToAuthors}"
-                   th:classappend="${activePage == 'authors' ? 'selected' : ''}">Autori</a>
+                >Autori</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/goToCrimeTypes}"
-                   th:classappend="${activePage == 'crimeTypes' ? 'selected' : ''}">Tipuri de infractiuni</a>
+                >Tipuri de infractiuni</a>
             </li>
         </ul>
         <form th:action="@{/criminal-file/goToAddCriminalFile}" style="padding-right: 20px">
@@ -48,20 +47,9 @@
     </div>
 </nav>
 <div>
-    <div class="card" style="width: 15rem; display: inline-grid">
-        <div class="card-body">
-            <h5 class="card-title">Total dosare cu autor necunoscut</h5>
-            <h6 th:text="${'In lucru:' + ' ' + nrOfFilesWithUnknownAuthor}"></h6>
-            <a th:href="@{/goToCriminalFilesAN}" class="card-link">Afiseaza dosare </a>
-        </div>
-    </div>
-    <div class="card" style="width: 15rem;">
-        <div class="card-body">
-            <h5 class="card-title">Total dosare cu autor cunoscut</h5>
-            <h6 th:text="${'In lucru:' + ' ' + nrOfFilesWithKnownAuthor}"></h6>
-            <a th:href="@{/goToCriminalFilesAC}" class="card-link">Afiseaza dosarele</a>
-        </div>
-    </div>
+
+    <h1>Welcome, <span th:text="${user.name}"></span></h1>
+    <p>Your email address is <span th:text="${user.email}"></span></p>
 </div>
 
 
