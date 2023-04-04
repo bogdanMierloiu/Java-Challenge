@@ -29,6 +29,12 @@ public class Wallet {
     @ToString.Exclude
     private List<Player> players = new ArrayList<>();
 
+    //TODO -> delete this
+
+    public Wallet(Long nrOfTokens) {
+        this.nrOfTokens = nrOfTokens;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

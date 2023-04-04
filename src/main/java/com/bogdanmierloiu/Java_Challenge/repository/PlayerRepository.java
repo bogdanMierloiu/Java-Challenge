@@ -1,4 +1,9 @@
 package com.bogdanmierloiu.Java_Challenge.repository;
 
-public interface PlayerRepository {
+import com.bogdanmierloiu.Java_Challenge.entity.Player;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PlayerRepository extends JpaRepository<Player, Long> {
+
+    boolean existsByName(String name);
 }
