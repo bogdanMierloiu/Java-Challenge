@@ -10,9 +10,13 @@ import java.util.List;
 @Mapper
 public interface PlayerMapper {
 
+
     Player map(PlayerRequest request);
+
 
     PlayerResponse map(Player player);
 
     List<PlayerResponse> map(List<Player> players);
+
+
 }

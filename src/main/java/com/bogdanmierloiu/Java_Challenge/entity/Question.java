@@ -31,7 +31,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Answer> respons = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
 
     @ManyToMany(mappedBy = "questions")
     @ToString.Exclude

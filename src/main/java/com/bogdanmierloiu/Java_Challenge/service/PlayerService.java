@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.lang3.StringUtils;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -47,12 +48,14 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
 
     @Override
     public List<PlayerResponse> getAll() {
-        return null;
+        return playerMapper.map(playerRepository.findAll());
     }
 
     @Override
     public PlayerResponse findById(Long id) {
-        return null;
+        return playerMapper.map(playerRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("The player with id " + id + " not found")
+        ));
     }
 
     @Override

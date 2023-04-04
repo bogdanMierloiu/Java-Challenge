@@ -10,7 +10,7 @@ public interface CrudRequest<T, K> {
 
     ResponseEntity<List<K>> getAll();
 
-    ResponseEntity<K> findById(Long id);
+    ResponseEntity<?> findById(Long id);
 
     ResponseEntity<K> update(T request);
 

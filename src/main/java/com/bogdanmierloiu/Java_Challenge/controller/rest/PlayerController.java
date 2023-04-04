@@ -7,10 +7,8 @@ import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -33,13 +31,19 @@ public class PlayerController implements CrudRequest<PlayerRequest, PlayerRespon
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<List<PlayerResponse>> getAll() {
-        return null;
+        return new ResponseEntity<>(playerService.getAll(), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PlayerResponse> findById(Long id) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(playerService.findById(id), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The player with id " + id + " not found!");
+        }
     }
 
     @Override
