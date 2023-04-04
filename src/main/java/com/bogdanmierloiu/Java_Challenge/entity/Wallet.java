@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,16 +18,16 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Long tokens;
+    private Long nrOfTokens;
     @ManyToMany
     @JoinTable(name = "wallet_badge",
             joinColumns = @JoinColumn(name = "wallet_id"),
             inverseJoinColumns = @JoinColumn(name = "badge_id"))
     @ToString.Exclude
-    private List<Badge> badges;
+    private List<Nft> nfts = new ArrayList<>();
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

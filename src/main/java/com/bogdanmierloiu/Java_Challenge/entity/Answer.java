@@ -1,11 +1,11 @@
 package com.bogdanmierloiu.Java_Challenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.Hibernate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,24 +13,28 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Reputation {
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String type;
+    private String text;
+    @Column(nullable = false)
+    @JsonProperty
+    private Boolean isValid;
 
-    @OneToMany(mappedBy = "reputation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Player> players = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    @ToStringExclude
+    private Question question;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Reputation reputation = (Reputation) o;
-        return getId() != null && Objects.equals(getId(), reputation.getId());
+        Answer answer = (Answer) o;
+        return getId() != null && Objects.equals(getId(), answer.getId());
     }
 
     @Override

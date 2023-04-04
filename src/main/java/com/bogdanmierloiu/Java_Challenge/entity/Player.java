@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +21,7 @@ public class Player {
     @Column(nullable = false)
     private String name;
     @ManyToOne
-    @JoinColumn(name = "rank_id")
+    @JoinColumn(name = "reputation_id")
     @ToString.Exclude
     private Reputation reputation;
 
@@ -27,6 +29,13 @@ public class Player {
     @JoinColumn(name = "wallet_id")
     @ToString.Exclude
     private Wallet wallet;
+
+    @ManyToMany
+    @JoinTable(name = "payer_question",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    @ToString.Exclude
+    private List<Question> questions = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

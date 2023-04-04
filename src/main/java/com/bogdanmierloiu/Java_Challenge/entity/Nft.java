@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,23 +13,23 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Badge {
+public class Nft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String type;
-    @ManyToMany(mappedBy = "badges")
+    @ManyToMany(mappedBy = "nfts")
     @ToString.Exclude
-    private List<Wallet> wallets;
+    private List<Wallet> wallets = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Badge badge = (Badge) o;
-        return getId() != null && Objects.equals(getId(), badge.getId());
+        Nft nft = (Nft) o;
+        return getId() != null && Objects.equals(getId(), nft.getId());
     }
 
     @Override
