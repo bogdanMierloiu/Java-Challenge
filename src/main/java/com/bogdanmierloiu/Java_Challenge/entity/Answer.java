@@ -6,6 +6,8 @@ import lombok.*;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +30,11 @@ public class Answer {
     @JoinColumn(name = "question_id")
     @ToStringExclude
     private Question question;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    @ToString.Exclude
+    private Player player;
 
     @Override
     public boolean equals(Object o) {

@@ -25,8 +25,7 @@
                 </form>
             </div>
             <div class="nav-item active">
-<!--                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">-->
-                    <a class="navbar-brand" th:href="@{/player/account}">
+                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-wallet" viewBox="0 0 16 16">
@@ -38,7 +37,21 @@
     </div>
 </nav>
 <div>
-    <h1>Welcome, <span th:text="${player.name}"></span></h1>
+    <h1>Question from <span th:text="${player.name}"></span></h1>
+    <form class="add-form" th:action="@{/question/add}" method="post">
+        <div class="form-group">
+            <label>Question</label>
+            <small class="form-text text-muted">Insert your question:</small>
+            <textarea name="text" rows="5" cols="50" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Reward</label>
+            <small class="form-text text-muted">Insert the number of $JAVA reward:</small>
+            <input type="number" name="rewardTokens" required>
+        </div>
+        <input type="hidden" name="playersIds" th:value="${player.getId()}">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 </div>
 
 

@@ -1,6 +1,9 @@
 package com.bogdanmierloiu.Java_Challenge.dto.question;
 
+import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class QuestionResponse {
@@ -11,6 +14,8 @@ public class QuestionResponse {
     private Long rewardTokens;
 
     private String text;
+
+    private List<PlayerResponse> playerResponseList;
 
     public QuestionResponse(Long id, String text) {
         this.id = id;

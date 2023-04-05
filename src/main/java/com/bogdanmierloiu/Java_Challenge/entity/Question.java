@@ -8,6 +8,7 @@ import org.hibernate.Hibernate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -36,6 +37,20 @@ public class Question {
     @ManyToMany(mappedBy = "questions")
     @ToString.Exclude
     private List<Player> players = new ArrayList<>();
+
+    @Transient
+    private List<Long> playerIds = new ArrayList<>();
+
+    public void setPlayerIds(List<Long> playerIds) {
+        this.playerIds = playerIds;
+        this.players = playerIds.stream()
+                .map(playerId -> new Player(playerId))
+                .collect(Collectors.toList());
+    }
+
+    public List<Long> getPlayerIds() {
+        return playerIds;
+    }
 
 
     @Override

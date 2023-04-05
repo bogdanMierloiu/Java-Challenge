@@ -21,8 +21,6 @@ public class Player {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String password;
     @ManyToOne
     @JoinColumn(name = "reputation_id")
     @ToString.Exclude
@@ -33,12 +31,22 @@ public class Player {
     @ToString.Exclude
     private Wallet wallet;
 
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Answer> answers = new ArrayList<>();
+
     @ManyToMany
-    @JoinTable(name = "payer_question",
+    @JoinTable(name = "player_question",
             joinColumns = @JoinColumn(name = "player_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     @ToString.Exclude
     private List<Question> questions = new ArrayList<>();
+
+    public Player(Long id) {
+        this.id = id;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

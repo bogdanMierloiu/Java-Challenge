@@ -15,14 +15,12 @@ import java.util.Objects;
 @Data
 @Builder
 public class AppUser implements UserDetails, OidcUser {
-    private Long id;
     String username;
     String password;
     String email;
     String userId;
     String name;
     String imageUrl;
-    private AppUserRole appUserRole;
 
     private Boolean locked;
 
