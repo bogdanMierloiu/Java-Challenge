@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CrudOperation<T, K> {
 
-    K add(T request) throws DuplicatePlayerException;
+    K add(T request);
 
     List<K> getAll();
 

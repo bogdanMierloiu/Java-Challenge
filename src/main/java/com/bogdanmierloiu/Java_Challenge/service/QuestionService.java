@@ -4,9 +4,7 @@ import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Question;
-import com.bogdanmierloiu.Java_Challenge.exception.DuplicatePlayerException;
 import com.bogdanmierloiu.Java_Challenge.mapper.QuestionMapper;
-import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,9 +33,13 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         return questionMapper.map(questionRepository.findAll());
     }
 
+    public List<QuestionResponse> getAllUnresolved() {
+        return questionMapper.map(questionRepository.findAllByIsResolvedFalse());
+    }
+
     @Override
     public QuestionResponse findById(Long id) {
-        return null;
+        return questionMapper.map(questionRepository.findById(id).orElseThrow());
     }
 
     @Override

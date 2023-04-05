@@ -25,8 +25,7 @@
                 </form>
             </div>
             <div class="nav-item active">
-                <!--                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">-->
-                <a class="navbar-brand" th:href="@{/player/account}">
+                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-wallet" viewBox="0 0 16 16">
@@ -37,18 +36,19 @@
         </div>
     </div>
 </nav>
+
 <div>
-    <div class="card" style="width: 25rem; display: inline-grid" th:each="question : ${questions}">
-        <div class="card-body">
-            <h5 class="card-title">Question</h5>
-            <h6 th:text="${question.getText()}"></h6>
-            <h6 th:text="${'Reward: ' + question.getRewardTokens() + ' $JAVA'}"></h6>
-<!--            <div th:each="answer: ${question}">-->
-<!--                -->
-<!--            </div>-->
-            <a th:href="@{/answer/add-answer-form/{id}(id=${question.getId()})}" class="card-link">Add answer</a>
+    <h1 th:text="${question.getText()}">></h1>
+    <form class="add-form" th:action="@{/answer/add}" method="post">
+
+        <div class="form-group">
+            <label>Insert your answer:</label>
+            <textarea name="text" rows="5" cols="50" required></textarea>
         </div>
-    </div>
+        <input type="hidden" name="questionId" th:value="${question.getId()}">
+        <input type="hidden" name="playerId" th:value="${playerId}">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 </div>
 
 

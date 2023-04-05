@@ -17,8 +17,4 @@ public class QuestionResponse {
 
     private List<PlayerResponse> playerResponseList;
 
-    public QuestionResponse(Long id, String text) {
-        this.id = id;
-        this.text = getText();
-    }
 }
