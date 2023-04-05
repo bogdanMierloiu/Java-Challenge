@@ -11,10 +11,19 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.*;
 
@@ -23,10 +32,11 @@ import static org.springframework.security.config.Customizer.*;
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AppUserService appUserService) throws Exception {
         return http
                 .formLogin(withDefaults())
-                .oauth2Login(withDefaults())
+                .oauth2Login(oc -> oc.userInfoEndpoint(ui -> ui.userService(appUserService.oauth2LoginHandler())
+                        .oidcUserService(appUserService.oidcLoginHandler())))
                 .authorizeHttpRequests(c -> c.anyRequest().authenticated())
                 .build();
     }
@@ -36,28 +46,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    UserDetailsService inMemoryUsers() {
-        InMemoryUserDetailsManager users = new InMemoryUserDetailsManager();
-
-        var bob = new User("bob", passwordEncoder().encode("1234"), Collections.emptyList());
-        var bil = User.builder()
-                .username("bil")
-                .password(passwordEncoder().encode("321"))
-                .roles("USER")
-                .authorities("read")
-                .build();
-
-        users.createUser(bob);
-        users.createUser(bil);
-
-        return users;
-    }
 
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> successLogger() {
         return event -> {
-            log.info("success: {}", event.getAuthentication());
+             log.info("success: {}", event.getAuthentication());
         };
     }
 

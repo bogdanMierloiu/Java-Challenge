@@ -20,6 +20,9 @@ public class Player {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(nullable = false, unique = true)
+    private String password;
     @ManyToOne
     @JoinColumn(name = "reputation_id")
     @ToString.Exclude
