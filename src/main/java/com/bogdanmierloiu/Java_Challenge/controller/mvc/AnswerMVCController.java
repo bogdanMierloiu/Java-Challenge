@@ -1,7 +1,6 @@
 package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerRequest;
-import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.security.AppUser;
 import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
@@ -33,6 +32,7 @@ public class AnswerMVCController {
         PlayerResponse playerResponse = playerService.findByName(name);
         model.addAttribute("playerId", playerResponse.getId());
         model.addAttribute("question", questionService.findById(Long.parseLong(id)));
+        model.addAttribute("answers", answerService.findByQuestion(Long.parseLong(id)));
         return "add-answer-form";
     }
 

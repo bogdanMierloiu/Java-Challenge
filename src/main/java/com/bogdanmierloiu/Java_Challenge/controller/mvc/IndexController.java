@@ -3,6 +3,7 @@ package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.security.AppUser;
+import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
 import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
 import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class IndexController {
 
     private final PlayerService playerService;
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @GetMapping
     public String goToIndex(Authentication authentication, Model model) {
@@ -37,7 +39,7 @@ public class IndexController {
             playerResponse = playerService.add(player);
         }
         model.addAttribute("player", playerResponse);
-        model.addAttribute("questions", questionService.getAllUnresolved());
+        model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
         return "index";
     }
 

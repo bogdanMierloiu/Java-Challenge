@@ -18,4 +18,10 @@ public class PlayerResponse {
     private WalletResponse wallet;
 
     List<QuestionResponse> questions;
+
+
+    public PlayerResponse(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,7 +34,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         return questionMapper.map(questionRepository.findAll());
     }
 
-    public List<QuestionResponse> getAllUnresolved() {
+    public List<QuestionResponse> findAllByIsResolvedFalse() {
         return questionMapper.map(questionRepository.findAllByIsResolvedFalse());
     }
 

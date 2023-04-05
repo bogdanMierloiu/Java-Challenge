@@ -6,7 +6,6 @@ import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,5 +21,7 @@ public interface QuestionMapper {
     default List<Player> mapPlayerIds(List<Long> playerIds) {
         return playerIds.stream().map(Player::new).collect(Collectors.toList());
     }
+
+
 
 }
