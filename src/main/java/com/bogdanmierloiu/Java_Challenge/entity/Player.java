@@ -35,17 +35,13 @@ public class Player {
     @ToString.Exclude
     private List<Answer> answers = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "player_question",
-            joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Question> questions = new ArrayList<>();
 
     public Player(Long id) {
         this.id = id;
     }
-
 
 
     @Override

@@ -2,9 +2,6 @@ package com.bogdanmierloiu.Java_Challenge.dto.question;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 public class QuestionRequest {
     private Long id;
@@ -13,5 +10,5 @@ public class QuestionRequest {
 
     private String text;
 
-    private List<Long> playersIds = new ArrayList<>();
+    private Long playerId;
 }

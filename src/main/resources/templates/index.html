@@ -21,11 +21,10 @@
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
             <div class="nav-item active">
                 <form th:action="@{/question/add-question-form}" style="padding-right: 20px">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add question</button>
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
                 </form>
             </div>
             <div class="nav-item active">
-                <!--                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">-->
                 <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -47,7 +46,7 @@
                         <h6 class="card-subtitle mb-2 text-muted" th:text="${question.getText()}"></h6>
                         <hr>
                         <p class="card-text" th:text="${'Reward: ' + question.getRewardTokens() + ' $JAVA'}"></p>
-                        <a th:href="@{/answer/add-answer-form/{id}(id=${question.getId()})}" class="card-link">Add answer</a>
+                        <a th:href="@{/answer/add-answer-form/{id}(id=${question.getId()})}" class="card-link">View challenge</a>
                     </div>
                 </div>
             </div>

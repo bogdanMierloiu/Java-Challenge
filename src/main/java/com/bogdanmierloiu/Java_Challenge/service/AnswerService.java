@@ -2,7 +2,10 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerResponse;
+import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Answer;
+import com.bogdanmierloiu.Java_Challenge.entity.Player;
+import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.mapper.AnswerMapper;
 import com.bogdanmierloiu.Java_Challenge.repository.AnswerRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -38,6 +42,21 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
     public List<AnswerResponse> findByQuestion(Long id) {
         return answerMapper.map(answerRepository.findByQuestionId(id));
     }
+
+    public void validateAnswer(Long answerId, Long playerId, Long questionId, Long playerWhoTryToValidateId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow();
+        Player playerWhoAddAnswer = playerRepository.findById(playerId).orElseThrow();
+        Question question = questionRepository.findById(questionId).orElseThrow();
+        Player playerWhoPutTheQuestion = question.getPlayer();
+        if (Objects.equals(playerWhoPutTheQuestion.getId(), playerWhoTryToValidateId)) {
+            answer.setIsValid(true);
+            question.setIsResolved(true);
+            playerWhoAddAnswer.getWallet().setNrOfTokens(playerWhoAddAnswer.getWallet().getNrOfTokens() + question.getRewardTokens());
+            playerWhoPutTheQuestion.getWallet().setNrOfTokens(playerWhoPutTheQuestion.getWallet().getNrOfTokens() - question.getRewardTokens());
+            answerRepository.save(answer);
+        }
+    }
+
 
     @Override
     public List<AnswerResponse> getAll() {

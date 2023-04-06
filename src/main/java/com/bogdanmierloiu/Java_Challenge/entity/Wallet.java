@@ -20,9 +20,9 @@ public class Wallet {
     @Column(nullable = false)
     private Long nrOfTokens;
     @ManyToMany
-    @JoinTable(name = "wallet_badge",
+    @JoinTable(name = "wallet_nft",
             joinColumns = @JoinColumn(name = "wallet_id"),
-            inverseJoinColumns = @JoinColumn(name = "badge_id"))
+            inverseJoinColumns = @JoinColumn(name = "nft_id"))
     @ToString.Exclude
     private List<Nft> nfts = new ArrayList<>();
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -2,13 +2,15 @@ package com.bogdanmierloiu.Java_Challenge.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -34,23 +36,11 @@ public class Question {
     @ToString.Exclude
     private List<Answer> answers = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "questions")
+    @ManyToOne
+    @JoinColumn(name = "player_id")
     @ToString.Exclude
-    private List<Player> players = new ArrayList<>();
+    private Player player;
 
-    @Transient
-    private List<Long> playerIds = new ArrayList<>();
-
-    public void setPlayerIds(List<Long> playerIds) {
-        this.playerIds = playerIds;
-        this.players = playerIds.stream()
-                .map(playerId -> new Player(playerId))
-                .collect(Collectors.toList());
-    }
-
-    public List<Long> getPlayerIds() {
-        return playerIds;
-    }
 
 
     @Override

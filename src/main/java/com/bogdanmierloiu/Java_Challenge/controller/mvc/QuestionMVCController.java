@@ -26,7 +26,7 @@ public class QuestionMVCController {
     @PostMapping("/add")
     public String addQuestion(HttpSession session, @ModelAttribute QuestionRequest questionRequest, Model model) {
         questionService.add(questionRequest);
-        model.addAttribute("questions", questionService.getAll());
+        model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
         return "index";
     }
 

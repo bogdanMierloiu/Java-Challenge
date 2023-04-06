@@ -2,16 +2,15 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionResponse;
-import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.mapper.QuestionMapper;
+import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,13 +18,13 @@ import java.util.stream.Collectors;
 public class QuestionService implements CrudOperation<QuestionRequest, QuestionResponse> {
     private final QuestionMapper questionMapper;
     private final QuestionRepository questionRepository;
+    private final PlayerRepository playerRepository;
 
     @Override
     public QuestionResponse add(QuestionRequest request) {
         Question questionToSave = questionMapper.map(request);
         questionToSave.setIsResolved(false);
-        List<Player> players = questionMapper.mapPlayerIds(request.getPlayersIds());
-        questionToSave.getPlayers().addAll(players);
+        questionToSave.setPlayer(playerRepository.findById(request.getPlayerId()).orElseThrow());
         return questionMapper.map(questionRepository.save(questionToSave));
     }
 

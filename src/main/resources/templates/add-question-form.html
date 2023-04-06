@@ -21,11 +21,12 @@
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
             <div class="nav-item active">
                 <form th:action="@{/question/add-question-form}" style="padding-right: 20px">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add question</button>
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
                 </form>
             </div>
             <div class="nav-item active">
-                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">
+                <!--                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">-->
+                <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-wallet" viewBox="0 0 16 16">
@@ -41,7 +42,6 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title">Question from <span th:text="${player.name}"></span></h1>
                     <hr>
                     <form class="add-form" th:action="@{/question/add}" method="post">
                         <div class="form-group">
@@ -54,8 +54,8 @@
                             <input type="number" id="rewardTokens" name="rewardTokens" required class="form-control">
                             <small class="form-text text-muted">Insert the number of $JAVA reward:</small>
                         </div>
-                        <input type="hidden" name="playersIds" th:value="${player.getId()}">
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <input type="hidden" name="playerId" th:value="${player.getId()}">
+                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add</button>
                     </form>
                 </div>
             </div>

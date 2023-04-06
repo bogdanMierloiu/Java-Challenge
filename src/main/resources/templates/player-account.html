@@ -18,23 +18,23 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/player/account/{id}(id=${player.id})}">Wallet</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/goToCriminalFilesAN}"
-                >Dosare cu autor necunoscut</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/goToAuthors}"
-                >Autori</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/goToCrimeTypes}"
-                >Tipuri de infractiuni</a>
-            </li>
-        </ul>
+        <div class="navbar-nav ml-auto justify-content-end align-items-center">
+            <div class="nav-item active">
+                <form th:action="@{/question/add-question-form}" style="padding-right: 20px">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
+                </form>
+            </div>
+            <div class="nav-item active">
+                <!--                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">-->
+                <a class="navbar-brand" th:href="@{/player/account}">
+                    Wallet
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-wallet" viewBox="0 0 16 16">
+                        <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
     </div>
 </nav>
 <div class="container mt-5">

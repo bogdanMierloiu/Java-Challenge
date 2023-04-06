@@ -4,8 +4,6 @@ import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 public class QuestionResponse {
@@ -17,6 +15,6 @@ public class QuestionResponse {
 
     private String text;
 
-    private List<PlayerResponse> playerResponseList;
+    private PlayerResponse player;
 
 }

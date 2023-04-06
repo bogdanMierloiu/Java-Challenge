@@ -21,11 +21,11 @@
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
             <div class="nav-item active">
                 <form th:action="@{/question/add-question-form}" style="padding-right: 20px">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add question</button>
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
                 </form>
             </div>
             <div class="nav-item active">
-                <a class="navbar-brand" th:href="@{/player/account/{id}(id=${player.id})}">
+                <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-wallet" viewBox="0 0 16 16">
@@ -47,23 +47,31 @@
                         <div class="form-group">
                             <label for="answerText">Insert your answer:</label>
                             <br>
-                            <textarea id="answerText" name="text" rows="10" cols="50" class="form-control" required></textarea>
+                            <textarea id="answerText" name="text" rows="10" cols="50" class="form-control"
+                                      required></textarea>
                         </div>
                         <input type="hidden" name="questionId" th:value="${question.getId()}">
                         <input type="hidden" name="playerId" th:value="${playerId}">
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add</button>
                     </form>
                     <hr>
+                    <h5>Answers</h5>
+                    <br>
                     <div th:each="answer : ${answers}" class="mb-4">
                         <h6 class="card-subtitle mb-2 text-muted" th:text="${answer.getPlayer().getName()}"></h6>
                         <p class="card-text" th:text="${answer.getText()}"></p>
+                        <div>
+                            <form th:action="@{/answer/validate/{answerId}/{playerId}/{questionId}(answerId=${answer.getId()},playerId=${answer.getPlayer().getId()},questionId=${question.getId()})}">
+                                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Validate</button>
+                            </form>
+                        </div>
+                        <hr>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
