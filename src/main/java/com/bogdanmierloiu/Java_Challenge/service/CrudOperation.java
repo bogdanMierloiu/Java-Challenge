@@ -1,7 +1,5 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
-import com.bogdanmierloiu.Java_Challenge.exception.DuplicatePlayerException;
-
 import java.util.List;
 
 public interface CrudOperation<T, K> {

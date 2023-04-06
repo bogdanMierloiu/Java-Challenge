@@ -2,7 +2,6 @@ package com.bogdanmierloiu.Java_Challenge.controller.rest;
 
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
-import com.bogdanmierloiu.Java_Challenge.exception.DuplicatePlayerException;
 import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

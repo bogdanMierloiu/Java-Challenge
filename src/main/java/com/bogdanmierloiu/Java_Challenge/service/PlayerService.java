@@ -32,7 +32,7 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         playerToSave.setWallet(wallet);
         playerToSave.setReputation(reputationService.createYoungExplorerReputation());
         playerToSave.getWallet().getNfts().add(nftService.createYoungExplorerNFT());
-        walletHistoryService.createEvent("Received: New player bonus", wallet);
+        walletHistoryService.createBonusEvent("Received: New player bonus", wallet);
         return playerMapper.map(playerRepository.save(playerToSave));
     }
 

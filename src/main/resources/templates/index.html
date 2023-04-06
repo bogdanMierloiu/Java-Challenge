@@ -33,6 +33,13 @@
                     </svg>
                 </a>
             </div>
+            <div class="nav-item active">
+                <a class="navbar-brand" th:href="@{/logout}">
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-log-out"></span> Log out
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 </nav>
@@ -46,7 +53,8 @@
                         <h6 class="card-subtitle mb-2 text-muted" th:text="${question.getText()}"></h6>
                         <hr>
                         <p class="card-text" th:text="${'Reward: ' + question.getRewardTokens() + ' $JAVA'}"></p>
-                        <a th:href="@{/answer/add-answer-form/{id}(id=${question.getId()})}" class="card-link">View challenge</a>
+                        <a th:href="@{/answer/add-answer-form/{id}(id=${question.getId()})}" class="card-link">View
+                            challenge</a>
                     </div>
                 </div>
             </div>

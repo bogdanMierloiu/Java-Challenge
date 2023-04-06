@@ -2,6 +2,8 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryResponse;
+import com.bogdanmierloiu.Java_Challenge.entity.Player;
+import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.entity.Wallet;
 import com.bogdanmierloiu.Java_Challenge.entity.WalletHistory;
 import com.bogdanmierloiu.Java_Challenge.mapper.WalletHistoryMapper;
@@ -24,13 +26,22 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
     private final WalletHistoryMapper walletHistoryMapper;
 
 
-    public WalletHistory createEvent(String event, Wallet wallet) {
+    public void createBonusEvent(String event, Wallet wallet) {
         WalletHistory walletHistory = new WalletHistory();
         walletHistory.setDateTime(LocalDateTime.now());
         walletHistory.setEvent(event);
         walletHistory.setWallet(wallet);
         walletHistory.setValue(wallet.getNrOfTokens());
-        return walletHistoryRepository.save(walletHistory);
+        walletHistoryRepository.save(walletHistory);
+    }
+
+    public void createTransferTokensEvent(String event, Player playerWhoPutQuestion, Player playerWhoAddAnswer, Question question) {
+        WalletHistory walletHistory = new WalletHistory();
+        walletHistory.setDateTime(LocalDateTime.now());
+        walletHistory.setEvent(event + " " + playerWhoPutQuestion.getName());
+        walletHistory.setWallet(playerWhoAddAnswer.getWallet());
+        walletHistory.setValue(question.getRewardTokens());
+        walletHistoryRepository.save(walletHistory);
     }
 
     @Override

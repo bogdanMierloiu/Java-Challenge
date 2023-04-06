@@ -2,7 +2,6 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerResponse;
-import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryRequest;
 import com.bogdanmierloiu.Java_Challenge.entity.Answer;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
@@ -60,17 +59,9 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
             playerWhoPutTheQuestion.getWallet().setNrOfTokens(playerWhoPutTheQuestion.getWallet().getNrOfTokens() - question.getRewardTokens());
             answerRepository.save(answer);
 
-            WalletHistoryRequest walletHistoryForReceiver = new WalletHistoryRequest();
-            walletHistoryForReceiver.setEvent("Received from " + playerWhoPutTheQuestion.getName());
-            walletHistoryForReceiver.setValue(question.getRewardTokens());
-            walletHistoryForReceiver.setWalletId(playerWhoAddAnswer.getWallet().getId());
-            walletHistoryService.add(walletHistoryForReceiver);
+            walletHistoryService.createTransferTokensEvent("Received from", playerWhoPutTheQuestion, playerWhoAddAnswer, question);
+            walletHistoryService.createTransferTokensEvent("Sent to", playerWhoAddAnswer, playerWhoPutTheQuestion, question);
 
-            WalletHistoryRequest walletHistoryForSender = new WalletHistoryRequest();
-            walletHistoryForSender.setEvent("Sent to " + playerWhoAddAnswer.getName());
-            walletHistoryForSender.setValue(question.getRewardTokens());
-            walletHistoryForSender.setWalletId(playerWhoPutTheQuestion.getWallet().getId());
-            walletHistoryService.add(walletHistoryForSender);
 
             if (validAnswersForPlayer(playerWhoAddAnswer.getId()) == 2) {
                 playerWhoAddAnswer.getWallet().getNfts().add(nftRepository.findById(2L).orElseThrow());
