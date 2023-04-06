@@ -2,7 +2,9 @@ package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
+import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
+import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.security.AppUser;
 import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
 import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
@@ -24,16 +26,19 @@ public class AnswerMVCController {
     private final QuestionService questionService;
 
     @GetMapping("/add-answer-form/{id}")
-    public String goToAddAnswer(Authentication authentication, @PathVariable("id") String id, Model model, HttpSession session) {
-        String name = null;
+    public String goToAddAnswer(Authentication authentication, @PathVariable("id") String id, Model model) {
+        String name;
         try {
             name = ((AppUser) authentication.getPrincipal()).getAttribute("name");
         } catch (Exception e) {
             name = ((AppUser) authentication.getPrincipal()).getUsername();
         }
         PlayerResponse playerResponse = playerService.findByName(name);
+        QuestionResponse question = questionService.findById(Long.parseLong(id));
+        PlayerResponse questionOwner = question.getPlayer();
         model.addAttribute("playerId", playerResponse.getId());
-        model.addAttribute("question", questionService.findById(Long.parseLong(id)));
+        model.addAttribute("question", question);
+        model.addAttribute("questionOwner", questionOwner);
         model.addAttribute("answers", answerService.findByQuestion(Long.parseLong(id)));
         return "add-answer-form";
     }
@@ -51,7 +56,7 @@ public class AnswerMVCController {
                            @PathVariable("questionId") Long questionId,
                            Authentication authentication,
                            Model model) {
-        String name = null;
+        String name;
         try {
             name = ((AppUser) authentication.getPrincipal()).getAttribute("name");
         } catch (Exception e) {

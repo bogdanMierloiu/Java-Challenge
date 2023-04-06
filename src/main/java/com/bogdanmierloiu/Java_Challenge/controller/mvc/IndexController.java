@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes("player")
 @RequiredArgsConstructor
 public class IndexController {
-
     private final PlayerService playerService;
     private final QuestionService questionService;
-    private final AnswerService answerService;
 
     @GetMapping
     public String goToIndex(Authentication authentication, Model model) {
-        String name = null;
+        String name;
         try {
             name = ((AppUser) authentication.getPrincipal()).getAttribute("name");
         } catch (Exception e) {

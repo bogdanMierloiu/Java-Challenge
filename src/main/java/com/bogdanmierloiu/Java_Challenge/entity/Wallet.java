@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Getter
@@ -29,11 +27,14 @@ public class Wallet {
     @ToString.Exclude
     private List<Player> players = new ArrayList<>();
 
-    //TODO -> delete this
 
     public Wallet(Long nrOfTokens) {
         this.nrOfTokens = nrOfTokens;
     }
+
+    @OneToMany(mappedBy = "wallet")
+    @ToString.Exclude
+    private List<WalletHistory> history = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
