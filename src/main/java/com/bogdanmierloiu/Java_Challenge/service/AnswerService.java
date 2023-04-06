@@ -22,16 +22,14 @@ import java.util.Objects;
 @Transactional
 @RequiredArgsConstructor
 public class AnswerService implements CrudOperation<AnswerRequest, AnswerResponse> {
-
     private final AnswerRepository answerRepository;
     private final PlayerRepository playerRepository;
-
     private final QuestionRepository questionRepository;
-
     private final WalletHistoryService walletHistoryService;
-
     private final AnswerMapper answerMapper;
-    private final NftRepository nftRepository;
+    private final NftService nftService;
+
+    private final ReputationService reputationService;
 
 
     @Override
@@ -52,7 +50,7 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
         Player playerWhoAddAnswer = playerRepository.findById(playerId).orElseThrow();
         Question question = questionRepository.findById(questionId).orElseThrow();
         Player playerWhoPutTheQuestion = question.getPlayer();
-        if (Objects.equals(playerWhoPutTheQuestion.getId(), playerWhoTryToValidateId)) {
+        if (validateUser(playerWhoPutTheQuestion, playerWhoTryToValidateId)) {
             answer.setIsValid(true);
             question.setIsResolved(true);
             playerWhoAddAnswer.getWallet().setNrOfTokens(playerWhoAddAnswer.getWallet().getNrOfTokens() + question.getRewardTokens());
@@ -62,16 +60,35 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
             walletHistoryService.createTransferTokensEvent("Received from", playerWhoPutTheQuestion, playerWhoAddAnswer, question);
             walletHistoryService.createTransferTokensEvent("Sent to", playerWhoAddAnswer, playerWhoPutTheQuestion, question);
 
-
-            if (validAnswersForPlayer(playerWhoAddAnswer.getId()) == 2) {
-                playerWhoAddAnswer.getWallet().getNfts().add(nftRepository.findById(2L).orElseThrow());
-            }
-
+            addNftReputationForPlayer(playerWhoAddAnswer);
+//            if (validAnswersForPlayer(playerWhoAddAnswer) == 2) {
+//                playerWhoAddAnswer.getWallet().getNfts().add(nftService.createAdventurerNFT());
+//                playerWhoAddAnswer.setReputation(reputationService.createAdventurerReputation());
+//            }
+//            if (validAnswersForPlayer(playerWhoAddAnswer) == 3) {
+//                playerWhoAddAnswer.getWallet().getNfts().add(nftService.createCosmonautNFT());
+//                playerWhoAddAnswer.setReputation(reputationService.createCosmonautReputation());
+//            }
         }
     }
 
-    public Long validAnswersForPlayer(Long playerId) {
-        return (long) answerRepository.findAllByPlayerIdAndIsValid(playerId, true).size();
+    public boolean validateUser(Player player, Long id) {
+        return Objects.equals(player.getId(), id);
+    }
+
+    public Long validAnswersForPlayer(Player player) {
+        return (long) answerRepository.findAllByPlayerIdAndIsValid(player.getId(), true).size();
+    }
+
+    public void addNftReputationForPlayer(Player playerWhoAddAnswer) {
+        if (validAnswersForPlayer(playerWhoAddAnswer) == 2) {
+            playerWhoAddAnswer.getWallet().getNfts().add(nftService.createAdventurerNFT());
+            playerWhoAddAnswer.setReputation(reputationService.createAdventurerReputation());
+        }
+        if (validAnswersForPlayer(playerWhoAddAnswer) == 3) {
+            playerWhoAddAnswer.getWallet().getNfts().add(nftService.createCosmonautNFT());
+            playerWhoAddAnswer.setReputation(reputationService.createCosmonautReputation());
+        }
     }
 
 
