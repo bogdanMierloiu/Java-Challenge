@@ -28,10 +28,10 @@ accesa prin intermediul relațiilor dintre entități.
 
 # Relațiile dintre aceste entități sunt:
 
-Utilizatorul este înrudit cu Rank într-o relație Multi-la-Un. Fiecare jucător are exact o reputație, dar fiecare
+Utilizatorul este înrudit cu Rank într-o relație Multi-la-Unu. Fiecare jucător are exact o reputație, dar fiecare
 reputație poate
 au mai mulți utilizatori.
-Utilizatorul este înrudit cu Wallet într-o relație Multi-la-Un. Fiecare jucător are exact un portofel, dar fiecare
+Utilizatorul este înrudit cu Wallet într-o relație Multi-la-Unu. Fiecare jucător are exact un portofel, dar fiecare
 portofel poate avea
 utilizatori multipli.
 Portofelul este legat de Insigna într-o relație Multi-la-Mulți. Fiecare portofel poate avea mai multe insigne și fiecare

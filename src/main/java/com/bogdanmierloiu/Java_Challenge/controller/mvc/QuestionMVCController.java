@@ -2,6 +2,7 @@ package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionRequest;
 import com.bogdanmierloiu.Java_Challenge.exception.NotEnoughTokens;
+import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
 import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/question")
 public class QuestionMVCController {
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @GetMapping("/add-question-form")
     public String goToAddQuestion(HttpSession session, Model model) {
@@ -34,6 +36,20 @@ public class QuestionMVCController {
             model.addAttribute("player", session.getAttribute("player"));
             return "add-question-form";
         }
+    }
+
+    @GetMapping("/questions-for-player/{playerId}")
+    public String viewAllQuestionsForPlayer(HttpSession session, Model model, @PathVariable("playerId") String playerId) {
+        model.addAttribute("questions", questionService.findAllByPlayer(Long.parseLong(playerId)));
+        model.addAttribute("player", session.getAttribute("player"));
+        return "questions-for-player";
+    }
+
+    @GetMapping("/answers-for-question/{questionId}")
+    public String viewAnswersForQuestion(@PathVariable("questionId") String questionId, Model model) {
+        model.addAttribute("answers", answerService.findByQuestion(Long.parseLong(questionId)));
+        model.addAttribute("question", questionService.findById(Long.parseLong(questionId)));
+        return "answers-for-question";
     }
 
 

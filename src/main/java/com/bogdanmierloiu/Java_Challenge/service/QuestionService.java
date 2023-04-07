@@ -1,16 +1,13 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
-import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.exception.NotEnoughTokens;
 import com.bogdanmierloiu.Java_Challenge.mapper.QuestionMapper;
-import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +21,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
     private final QuestionRepository questionRepository;
     private final PlayerService playerService;
 
-    public QuestionResponse addFromPlayer(QuestionRequest questionRequest) throws NotEnoughTokens {
+    public void addFromPlayer(QuestionRequest questionRequest) throws NotEnoughTokens {
         Player playerWhoPutQuestion = playerService.findByIdReturnPlayer(questionRequest.getPlayerId());
         if (!checkPlayerTokens(playerWhoPutQuestion, questionRequest)) {
             throw new NotEnoughTokens("Not enough tokens available!");
@@ -32,7 +29,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         Question questionToSave = questionMapper.map(questionRequest);
         questionToSave.setIsResolved(false);
         questionToSave.setPlayer(playerWhoPutQuestion);
-        return questionMapper.map(questionRepository.save(questionToSave));
+        questionMapper.map(questionRepository.save(questionToSave));
     }
 
     public Boolean checkPlayerTokens(Player player, QuestionRequest question) {
@@ -47,6 +44,14 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         return true;
     }
 
+    public List<QuestionResponse> findAllByPlayerAndIsResolvedFalse(Long playerId) {
+        return questionMapper.map(questionRepository.findAllByPlayerIdAndIsResolvedFalse(playerId));
+    }
+
+    public List<QuestionResponse> findAllByPlayer(Long playerId) {
+        return questionMapper.map(questionRepository.findAllByPlayerIdOrderByIsResolvedAsc(playerId));
+    }
+
     @Override
     public QuestionResponse add(QuestionRequest request) {
         return null;
@@ -57,9 +62,6 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         return questionMapper.map(questionRepository.findAll());
     }
 
-    public List<QuestionResponse> findAllByPlayerAndIsResolvedFalse(Long playerId) {
-        return questionMapper.map(questionRepository.findAllByPlayerIdAndIsResolvedFalse(playerId));
-    }
 
     public List<QuestionResponse> findAllByIsResolvedFalse() {
         return questionMapper.map(questionRepository.findAllByIsResolvedFalse());

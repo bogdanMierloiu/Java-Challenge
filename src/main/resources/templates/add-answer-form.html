@@ -49,12 +49,12 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title" th:text="${question.getText()}"></h1>
+                    <h2 class="card-title" th:text="${question.getText()}"></h2>
                     <form class="add-form" th:action="@{/answer/add}" method="post">
                         <div class="form-group">
                             <label for="answerText">Insert your answer:</label>
                             <br>
-                            <textarea id="answerText" name="text" rows="10" cols="50" class="form-control"
+                            <textarea id="answerText" name="text" rows="5" cols="50" class="form-control"
                                       required></textarea>
                         </div>
                         <input type="hidden" name="questionId" th:value="${question.getId()}">

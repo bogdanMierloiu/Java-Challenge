@@ -40,7 +40,7 @@ public class AppUserService implements UserDetailsService {
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
         var admin = AppUser.builder()
-                .username("bil")
+                .username("admin")
                 .password(passwordEncoder.encode("1234"))
                 .authorities(List.of(new SimpleGrantedAuthority("read")))
                 .build();
