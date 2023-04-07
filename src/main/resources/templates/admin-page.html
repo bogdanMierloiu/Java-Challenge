@@ -12,7 +12,6 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -59,41 +58,17 @@
 </nav>
 
 <div class="content-wrap">
-    <div th:if="${not #lists.isEmpty(questions)}" class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Question</th>
-                <th>Reward</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="question: ${questions}">
-                <td>
-                    <pre th:text="${question.getText()}"></pre>
-                </td>
-                <td>
-                    <span th:text="${question.getRewardTokens()}"></span>
-                </td>
-                <td>
-                    <span th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}"></span>
-                    <div th:if="${question.getIsResolved() == false}">
-                        <form th:action="@{/answer/add-answer-form/{id}(id=${question.getId()})}">
-                            <button class="btn btn-outline-info btn-sm" type="submit">View</button>
-                        </form>
-                    </div>
-                    <div th:if="${question.getIsResolved() == true}">
-                        <form th:action="@{/question/answers-for-question/{questionId}(questionId=${question.getId()})}">
-                            <button class="btn btn-outline-info btn-sm" type="submit">View</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+
+    <h3>Admin Tools</h3>
+    <div>
+        <form th:action="@{/admin/all-players}">
+            <button type="submit" class="btn btn-success my-sm-0">All players</button>
+        </form>
+        <button type="submit" class="btn btn-success my-sm-0">Your questions</button>
+        <button type="submit" class="btn btn-success my-sm-0">Your questions</button>
     </div>
 </div>
+
 
 <footer>
     <div class="container-fluid bg-light text-center">
@@ -111,6 +86,7 @@
         </div>
     </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

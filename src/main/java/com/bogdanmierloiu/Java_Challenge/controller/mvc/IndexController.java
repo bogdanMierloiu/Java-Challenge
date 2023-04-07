@@ -24,19 +24,7 @@ public class IndexController {
 
     @GetMapping
     public String goToIndex(Authentication authentication, Model model) {
-        String name;
-        try {
-            name = ((AppUser) authentication.getPrincipal()).getAttribute("name");
-        } catch (Exception e) {
-            name = ((AppUser) authentication.getPrincipal()).getUsername();
-        }
-        PlayerResponse playerResponse = playerService.findByName(name);
-        if (playerResponse == null) {
-            PlayerRequest player = new PlayerRequest();
-            player.setName(name);
-            playerResponse = playerService.add(player);
-        }
-        model.addAttribute("player", playerResponse);
+        AdminController.checkUser(authentication, model, playerService);
         model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
         return "index";
     }

@@ -2,12 +2,14 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletResponse;
+import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Wallet;
 import com.bogdanmierloiu.Java_Challenge.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,9 +18,21 @@ import java.util.List;
 public class WalletService implements CrudOperation<WalletRequest, WalletResponse> {
 
     private final WalletRepository walletRepository;
+    private final ReputationService reputationService;
+    private final NftService nftService;
 
-    public Wallet createWallet() {
+    public Wallet createUserWallet() {
         Wallet wallet = new Wallet(100L);
+        return walletRepository.save(wallet);
+    }
+
+    public Wallet createAdminWallet() {
+        Wallet wallet = new Wallet();
+        wallet.setNrOfTokens(Long.MAX_VALUE);
+        wallet.getNfts().addAll(Arrays.asList(
+                nftService.createYoungExplorerNFT(),
+                nftService.createAdventurerNFT(),
+                nftService.createCosmonautNFT()));
         return walletRepository.save(wallet);
     }
 

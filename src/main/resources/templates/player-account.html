@@ -32,7 +32,7 @@
                 </form>
             </div>
             <div th:if="${player.getName() == 'admin'}" class="nav-item active mr-3">
-                <form th:action="@{/admin/tools}">
+                <form th:action="@{/admin/admin-page}">
                     <button type="submit" class="btn btn-outline-info my-2 my-sm-0">Admin tools</button>
                 </form>
             </div>
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                         <hr>
-                        <h3><i class="bi bi-palette"></i> NFT</h3>
+                        <h3><i class="bi bi-palette"></i> NFTs</h3>
                         <div th:each="nft : ${nftList}">
                             <h4 th:text="${nft.getType()}"></h4>
                             <img th:if="${nft.getType() == 'Young Explorer'}"

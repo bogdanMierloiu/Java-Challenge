@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -28,11 +30,18 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
     @Override
     public PlayerResponse add(PlayerRequest request) {
         Player playerToSave = playerMapper.map(request);
-        Wallet wallet = walletService.createWallet();
-        playerToSave.setWallet(wallet);
-        playerToSave.setReputation(reputationService.createYoungExplorerReputation());
-        playerToSave.getWallet().getNfts().add(nftService.createYoungExplorerNFT());
-        walletHistoryService.createBonusEvent("Received: New player bonus", wallet);
+        if (Objects.equals(playerToSave.getName(), "admin")) {
+            Wallet adminWallet = walletService.createAdminWallet();
+            playerToSave.setWallet(adminWallet);
+            playerToSave.setReputation(reputationService.createCosmonautReputation());
+            walletHistoryService.createBonusEvent("Received: New player bonus", adminWallet);
+        } else {
+            Wallet wallet = walletService.createUserWallet();
+            playerToSave.setWallet(wallet);
+            playerToSave.setReputation(reputationService.createYoungExplorerReputation());
+            playerToSave.getWallet().getNfts().add(nftService.createYoungExplorerNFT());
+            walletHistoryService.createBonusEvent("Received: New player bonus", wallet);
+        }
         return playerMapper.map(playerRepository.save(playerToSave));
     }
 
@@ -51,6 +60,7 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
                 () -> new NotFoundException("The player with id " + id + " not found")
         ));
     }
+
     public Player findByIdReturnPlayer(Long id) {
         return playerRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("The player with id " + id + " not found")
