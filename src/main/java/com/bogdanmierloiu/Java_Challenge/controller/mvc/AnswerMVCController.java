@@ -8,6 +8,7 @@ import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
 import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
 import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,9 +43,22 @@ public class AnswerMVCController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute AnswerRequest answerRequest, Model model) {
-        answerService.add(answerRequest);
-        model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
-        return "index";
+        try {
+            answerService.add(answerRequest);
+            model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
+            return "index";
+        } catch (DataIntegrityViolationException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
+            PlayerResponse questionOwner = question.getPlayer();
+            model.addAttribute("playerId", answerRequest.getPlayerId());
+            model.addAttribute("question", question);
+            model.addAttribute("questionOwner", questionOwner);
+            model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
+            return "add-answer-form";
+
+        }
+
     }
 
     @GetMapping("/validate/{answerId}/{playerId}/{questionId}")

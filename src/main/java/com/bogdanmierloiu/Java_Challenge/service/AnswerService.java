@@ -2,16 +2,15 @@ package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerResponse;
-import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryRequest;
 import com.bogdanmierloiu.Java_Challenge.entity.Answer;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.mapper.AnswerMapper;
 import com.bogdanmierloiu.Java_Challenge.repository.AnswerRepository;
-import com.bogdanmierloiu.Java_Challenge.repository.NftRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,10 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
 
 
     @Override
-    public AnswerResponse add(AnswerRequest request) {
+    public AnswerResponse add(AnswerRequest request) throws DataIntegrityViolationException {
+        if (request.getText().length() > 2000) {
+            throw new DataIntegrityViolationException("Answer is too long! Max : 2000 characters");
+        }
         Answer answerToSave = answerMapper.map(request);
         answerToSave.setIsValid(false);
         answerToSave.setPlayer(playerRepository.findById(request.getPlayerId()).orElseThrow());

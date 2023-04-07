@@ -65,7 +65,7 @@
                 <div class="card">
                     <div class="card-body">
                         <pre class="card-text" th:text="${question.text}"></pre>
-                         <form class="add-form" th:action="@{/answer/add}" method="post">
+                        <form class="add-form" th:action="@{/answer/add}" method="post">
                             <div class="form-group">
                                 <label for="answerText">Insert your answer:</label>
                                 <br>
@@ -75,6 +75,9 @@
                             <input type="hidden" name="questionId" th:value="${question.getId()}">
                             <input type="hidden" name="playerId" th:value="${playerId}">
                             <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Add</button>
+                            <p class="error-message" th:if="${errorMessage}">
+                                [[${errorMessage}]]
+                            </p>
                         </form>
                         <hr>
                         <h5>Answers</h5>
