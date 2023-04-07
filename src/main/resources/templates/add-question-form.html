@@ -8,9 +8,11 @@
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -18,12 +20,24 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="navbar-nav ml-auto justify-content-end align-items-center">
-            <div class="nav-item active">
-                <form th:action="@{/question/add-question-form}" style="padding-right: 20px">
+        <div class="navbar-nav mr-auto align-items-center">
+            <div class="nav-item active mr-3">
+                <form th:action="@{/question/add-question-form}">
                     <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
                 </form>
             </div>
+            <div th:if="${player.getName() == 'admin'}" class="nav-item active mr-3">
+                <form th:action="@{/admin/tools}">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Admin tools</button>
+                </form>
+            </div>
+            <div th:if="${player.getName() != 'admin'}" class="nav-item active mr-3">
+                <form th:action="@{/question/questions-for-player/{playerId}(playerId=${player.getId()})}">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Your questions</button>
+                </form>
+            </div>
+        </div>
+        <div class="navbar-nav ml-auto justify-content-end align-items-center">
             <div class="nav-item active">
                 <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
@@ -43,35 +57,56 @@
         </div>
     </div>
 </nav>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-body">
-                    <hr>
-                    <form class="add-form" th:action="@{/question/add}" method="post">
-                        <div class="form-group">
-                            <label for="questionText">Question</label>
-                            <textarea id="questionText" name="text" rows="5" cols="50" required class="form-control">[[${questionRequest?.text}]]</textarea>
-                            <small class="form-text text-muted">Insert your question:</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="rewardTokens">Reward</label>
-                            <input type="number" id="rewardTokens" name="rewardTokens" required class="form-control" value="[[${questionRequest.rewardTokens}]]">
-                            <small class="form-text text-muted">Insert the number of $JAVA reward:</small>
-                        </div>
-                        <input type="hidden" name="playerId" th:value="${player.getId()}">
-                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create</button>
-                        <p class="error-message" th:if="${errorMessage}">
-                            [[${errorMessage}]]
-                        </p>
-                    </form>
+
+<div class="content-wrap">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <hr>
+                        <form class="add-form" th:action="@{/question/add}" method="post">
+                            <div class="form-group">
+                                <label for="questionText">Question</label>
+                                <textarea id="questionText" name="text" rows="5" cols="50" required
+                                          class="form-control">[[${questionRequest?.text}]]</textarea>
+                                <small class="form-text text-muted">Insert your question:</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="rewardTokens">Reward</label>
+                                <input type="number" id="rewardTokens" name="rewardTokens" required class="form-control"
+                                       value="[[${questionRequest.rewardTokens}]]">
+                                <small class="form-text text-muted">Insert the number of $JAVA reward:</small>
+                            </div>
+                            <input type="hidden" name="playerId" th:value="${player.getId()}">
+                            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create</button>
+                            <p class="error-message" th:if="${errorMessage}">
+                                [[${errorMessage}]]
+                            </p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<footer>
+    <div class="container-fluid bg-light text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-muted mb-0">Java Challenge &copy; <span
+                        th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span></p>
+                <p class="text-muted mb-0">Made with <i class="fas fa-heart text-danger"></i> for programming </p>
+                <div class="text-center">
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-phone"></i> +40-761495719</p>
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-map-marker-alt"></i> Romania, Bucharest
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

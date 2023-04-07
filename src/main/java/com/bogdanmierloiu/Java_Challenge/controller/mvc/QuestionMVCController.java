@@ -6,9 +6,12 @@ import com.bogdanmierloiu.Java_Challenge.service.AnswerService;
 import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLDataException;
 
 @Controller
 @SessionAttributes("player")
@@ -30,7 +33,7 @@ public class QuestionMVCController {
             questionService.addFromPlayer(questionRequest);
             model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
             return "index";
-        } catch (NotEnoughTokens e) {
+        } catch (NotEnoughTokens | DataIntegrityViolationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("questionRequest", questionRequest);
             model.addAttribute("player", session.getAttribute("player"));

@@ -22,7 +22,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String text;
 
     @Column(nullable = false)
@@ -40,7 +40,6 @@ public class Question {
     @JoinColumn(name = "player_id")
     @ToString.Exclude
     private Player player;
-
 
 
     @Override

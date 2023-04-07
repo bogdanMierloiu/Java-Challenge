@@ -8,6 +8,7 @@ import com.bogdanmierloiu.Java_Challenge.exception.NotEnoughTokens;
 import com.bogdanmierloiu.Java_Challenge.mapper.QuestionMapper;
 import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,13 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
     private final QuestionRepository questionRepository;
     private final PlayerService playerService;
 
-    public void addFromPlayer(QuestionRequest questionRequest) throws NotEnoughTokens {
+    public void addFromPlayer(QuestionRequest questionRequest) throws NotEnoughTokens, DataIntegrityViolationException {
         Player playerWhoPutQuestion = playerService.findByIdReturnPlayer(questionRequest.getPlayerId());
         if (!checkPlayerTokens(playerWhoPutQuestion, questionRequest)) {
             throw new NotEnoughTokens("Not enough tokens available!");
+        }
+        if(questionRequest.getText().length()>2000){
+            throw new DataIntegrityViolationException("Question is too long! Max : 2000 characters");
         }
         Question questionToSave = questionMapper.map(questionRequest);
         questionToSave.setIsResolved(false);
@@ -38,11 +42,9 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         for (var playerQuestion : playerQuestions) {
             tokensReserved += playerQuestion.getRewardTokens();
         }
-        if (player.getWallet().getNrOfTokens() < tokensReserved + question.getRewardTokens()) {
-            return false;
-        }
-        return true;
+        return player.getWallet().getNrOfTokens() >= tokensReserved + question.getRewardTokens();
     }
+
 
     public List<QuestionResponse> findAllByPlayerAndIsResolvedFalse(Long playerId) {
         return questionMapper.map(questionRepository.findAllByPlayerIdAndIsResolvedFalse(playerId));
