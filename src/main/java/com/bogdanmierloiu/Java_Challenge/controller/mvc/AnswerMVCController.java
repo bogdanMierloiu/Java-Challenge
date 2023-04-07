@@ -55,10 +55,11 @@ public class AnswerMVCController {
             model.addAttribute("question", question);
             model.addAttribute("questionOwner", questionOwner);
             model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
+            if(answerRequest.getText() != null) {
+                model.addAttribute("previousAnswer", answerRequest.getText());
+            }
             return "add-answer-form";
-
         }
-
     }
 
     @GetMapping("/validate/{answerId}/{playerId}/{questionId}")

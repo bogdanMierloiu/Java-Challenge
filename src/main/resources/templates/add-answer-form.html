@@ -26,14 +26,14 @@
                     <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create a challenge</button>
                 </form>
             </div>
-            <div th:if="${player.getName() == 'admin'}" class="nav-item active mr-3">
-                <form th:action="@{/admin/tools}">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Admin tools</button>
-                </form>
-            </div>
-            <div th:if="${player.getName() != 'admin'}" class="nav-item active mr-3">
+            <div class="nav-item active mr-3">
                 <form th:action="@{/question/questions-for-player/{playerId}(playerId=${player.getId()})}">
                     <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Your questions</button>
+                </form>
+            </div>
+            <div th:if="${player.getName() == 'admin'}" class="nav-item active mr-3">
+                <form th:action="@{/admin/tools}">
+                    <button type="submit" class="btn btn-outline-info my-2 my-sm-0">Admin tools</button>
                 </form>
             </div>
         </div>
@@ -70,7 +70,7 @@
                                 <label for="answerText">Insert your answer:</label>
                                 <br>
                                 <textarea id="answerText" name="text" rows="5" cols="50" class="form-control"
-                                          required></textarea>
+                                          required>[[${previousAnswer}]]</textarea>
                             </div>
                             <input type="hidden" name="questionId" th:value="${question.getId()}">
                             <input type="hidden" name="playerId" th:value="${playerId}">
