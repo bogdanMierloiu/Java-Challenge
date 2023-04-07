@@ -81,7 +81,7 @@
                         <br>
                         <div th:each="answer : ${answers}" class="mb-4">
                             <h6 class="card-subtitle mb-2 text-muted" th:text="${answer.getPlayer().getName()}"></h6>
-                            <p class="card-text" th:text="${answer.getText()}"></p>
+                            <pre th:text="${answer.getText()}"></pre>
                             <div th:if="${playerId == questionOwner.id}">
                                 <form th:action="@{/answer/validate/{answerId}/{playerId}/{questionId}(answerId=${answer.getId()},playerId=${answer.getPlayer().getId()},questionId=${question.getId()})}">
                                     <button class="btn btn-outline-success my-2 my-sm-0" type="button"
