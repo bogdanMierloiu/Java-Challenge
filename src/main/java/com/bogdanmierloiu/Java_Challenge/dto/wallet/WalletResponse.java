@@ -13,6 +13,8 @@ public class WalletResponse {
 
     private Long nrOfTokens;
 
+    private String address;
+
     private List<Nft> nfts;
 
     private PlayerResponse player;

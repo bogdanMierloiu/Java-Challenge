@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,13 +24,14 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
     private final NftService nftService;
 
     public Wallet createUserWallet() {
-        Wallet wallet = new Wallet(100L);
+        Wallet wallet = new Wallet(100L, generateWalletAddress());
         return walletRepository.save(wallet);
     }
 
     public Wallet createAdminWallet() {
         Wallet wallet = new Wallet();
         wallet.setNrOfTokens(9_000_000L);
+        wallet.setAddress(generateWalletAddress());
         wallet.getNfts().addAll(Arrays.asList(
                 nftService.createYoungExplorerNFT(),
                 nftService.createAdventurerNFT(),
@@ -60,6 +62,16 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
     @Override
     public void delete(Long id) {
 
+    }
+
+    public static String generateWalletAddress() {
+        final String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        final SecureRandom RANDOM = new SecureRandom();
+        final StringBuilder sb = new StringBuilder("0x");
+        for (int i = 0; i < 38; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
     }
 
 

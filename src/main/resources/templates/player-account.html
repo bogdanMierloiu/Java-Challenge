@@ -82,14 +82,8 @@
                             <div class="col-sm-6 col-md-4">
                                 <form th:action="@{/admin/all-players}">
                                     <button type="submit"
-                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Players
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="col-sm-6 col-md-4">
-                                <form th:action="@{/admin/all-questions}">
-                                    <button type="submit"
-                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Questions
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
+                                        Send
                                     </button>
                                 </form>
                             </div>
@@ -101,6 +95,13 @@
                                     </button>
                                 </a>
                             </div>
+                        </div>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <p>Your wallet address:</p>
+                        </div>
+                        <div class="row justify-content-center">
+                            <p th:text="${wallet.getAddress()}" style="font-weight:bold;"></p>
                         </div>
                         <hr>
                         <h3><i class="bi bi-palette"></i> NFTs</h3>

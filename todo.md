@@ -5,6 +5,7 @@ Admin tools:
 - Button for block/unblock player (List<Player> blockedPlayers, and method to verify when a user try go log in + blocked
   player page(message: contact admin: phone number))
 
+- Find by wallet address
 - Send tokens from player to player, and bonus from admin button
 
 - Delete/Update question

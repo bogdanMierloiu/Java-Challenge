@@ -17,6 +17,8 @@ public class Wallet {
     private Long id;
     @Column(nullable = false)
     private Long nrOfTokens;
+    @Column(nullable = false)
+    private String address;
     @ManyToMany
     @JoinTable(name = "wallet_nft",
             joinColumns = @JoinColumn(name = "wallet_id"),
@@ -27,9 +29,9 @@ public class Wallet {
     @ToString.Exclude
     private List<Player> players = new ArrayList<>();
 
-
-    public Wallet(Long nrOfTokens) {
+    public Wallet(Long nrOfTokens, String address) {
         this.nrOfTokens = nrOfTokens;
+        this.address = address;
     }
 
     @OneToMany(mappedBy = "wallet")
