@@ -79,7 +79,7 @@
                     <span th:text="${player.getName()}"></span>
                 </td>
                 <td>
-                    <span th:text="${player.getWallet().getNrOfTokens()}"></span>
+                    <span th:text="${player.getWallet().getNrOfTokens() + ' $JAVA'}"></span>
                 </td>
                 <td>
                     <span th:text="${player.getReputation().getType()}"></span>

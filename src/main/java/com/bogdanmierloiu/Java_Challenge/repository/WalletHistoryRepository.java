@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WalletHistoryRepository extends JpaRepository<WalletHistory, Long> {
 
-    List<WalletHistory> findByWalletId(Long id);
+    List<WalletHistory> findByWalletIdOrderByDateTimeDesc(Long id);
 }

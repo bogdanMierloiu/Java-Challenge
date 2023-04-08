@@ -4,6 +4,7 @@ import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
 import com.bogdanmierloiu.Java_Challenge.entity.Wallet;
+import com.bogdanmierloiu.Java_Challenge.mapper.WalletMapper;
 import com.bogdanmierloiu.Java_Challenge.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
 public class WalletService implements CrudOperation<WalletRequest, WalletResponse> {
 
     private final WalletRepository walletRepository;
-    private final ReputationService reputationService;
+    private final WalletMapper walletMapper;
     private final NftService nftService;
 
     public Wallet createUserWallet() {
@@ -28,7 +29,7 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
 
     public Wallet createAdminWallet() {
         Wallet wallet = new Wallet();
-        wallet.setNrOfTokens(Long.MAX_VALUE);
+        wallet.setNrOfTokens(9_000_000L);
         wallet.getNfts().addAll(Arrays.asList(
                 nftService.createYoungExplorerNFT(),
                 nftService.createAdventurerNFT(),
@@ -43,7 +44,7 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
 
     @Override
     public List<WalletResponse> getAll() {
-        return null;
+        return walletMapper.mapWithPlayerList(walletRepository.findAllOrderByTokens());
     }
 
     @Override

@@ -12,7 +12,6 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -60,71 +59,43 @@
 
 <div class="content-wrap">
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h1 class="card-title" th:text="${player.name}"></h1>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <h3><i class="bi bi-currency-dollar"></i> Tokens</h3>
-                                <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${wallet.getNrOfTokens() + ' $JAVA'}"></h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card-deck">
+                    <div class="card mb-4" style="min-width: 18rem;" th:each="wallet : ${wallets}">
+                        <div class="card-body d-flex justify-content-between flex-column">
+                            <h5 class="card-title mb-4" th:text="${wallet.getPlayer().getName() + &quot;'s wallet&quot;}"></h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="font-weight-bold">ID:</span>
+                                    <span class="ml-2" th:text="${wallet.getId()}"></span>
+                                    <br>
+                                    <span class="font-weight-bold">Tokens:</span>
+                                    <span class="ml-2 text-muted" th:text="${wallet.getNrOfTokens() + ' $JAVA'}"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="font-weight-bold">NFTs:</span>
+                                    <ul class="ml-2 mt-2" th:each="nft:${wallet.getNfts()}">
+                                        <li th:text="${nft.getType()}"></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col">
-                                <h3><i class="bi bi-shield-shaded"></i> Reputation</h3>
-                                <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${player.getReputation().getType()}"></h2>
+                            <hr>
+                            <div class="mt-auto text-center">
+                                <a class="btn btn-outline-primary btn-block"
+                                   th:href="@{/admin/wallet-history/{walletId}(walletId=${wallet.getId()})}">
+                                    View history
+                                </a>
                             </div>
-                        </div>
-                        <hr>
-                        <h3><i class="bi bi-palette"></i> NFTs</h3>
-                        <div th:each="nft : ${nftList}">
-                            <h4 th:text="${nft.getType()}"></h4>
-                            <img th:if="${nft.getType() == 'Young Explorer'}"
-                                 th:src="@{/images/young_explorer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Adventurer'}"
-                                 th:src="@{/images/adventurer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Cosmonaut'}"
-                                 th:src="@{/images/cosmonaut.png}"
-                                 width="200" height="200">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <h5>History</h5>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Value</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="history: ${walletHistory}">
-                        <td>
-                            <span th:text="${history.getEvent()}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${history.getValue() + ' $JAVA'}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#temporals.format(history.getDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 </div>
+
 
 <footer>
     <div class="container-fluid bg-light text-center">
@@ -142,6 +113,7 @@
         </div>
     </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

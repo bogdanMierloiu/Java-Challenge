@@ -53,7 +53,7 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
     }
 
     public List<WalletHistoryResponse> findByWallet(Long id) {
-        return walletHistoryMapper.map(walletHistoryRepository.findByWalletId(id));
+        return walletHistoryMapper.map(walletHistoryRepository.findByWalletIdOrderByDateTimeDesc(id));
     }
 
     @Override

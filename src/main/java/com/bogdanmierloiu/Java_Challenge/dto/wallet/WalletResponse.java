@@ -1,5 +1,6 @@
 package com.bogdanmierloiu.Java_Challenge.dto.wallet;
 
+import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Nft;
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class WalletResponse {
     private Long nrOfTokens;
 
     private List<Nft> nfts;
+
+    private PlayerResponse player;
 }

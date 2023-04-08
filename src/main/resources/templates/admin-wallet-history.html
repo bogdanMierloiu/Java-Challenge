@@ -12,7 +12,6 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -59,72 +58,39 @@
 </nav>
 
 <div class="content-wrap">
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h1 class="card-title" th:text="${player.name}"></h1>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <h3><i class="bi bi-currency-dollar"></i> Tokens</h3>
-                                <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${wallet.getNrOfTokens() + ' $JAVA'}"></h2>
-                            </div>
-                            <div class="col">
-                                <h3><i class="bi bi-shield-shaded"></i> Reputation</h3>
-                                <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${player.getReputation().getType()}"></h2>
-                            </div>
-                        </div>
-                        <hr>
-                        <h3><i class="bi bi-palette"></i> NFTs</h3>
-                        <div th:each="nft : ${nftList}">
-                            <h4 th:text="${nft.getType()}"></h4>
-                            <img th:if="${nft.getType() == 'Young Explorer'}"
-                                 th:src="@{/images/young_explorer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Adventurer'}"
-                                 th:src="@{/images/adventurer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Cosmonaut'}"
-                                 th:src="@{/images/cosmonaut.png}"
-                                 width="200" height="200">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <h5>History</h5>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Value</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="history: ${walletHistory}">
-                        <td>
-                            <span th:text="${history.getEvent()}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${history.getValue() + ' $JAVA'}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#temporals.format(history.getDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div style="padding : 3px">
+        <h5>Transaction history for the player's wallet: <span th:text="${player.getName()}"></span></h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Transaction Hash</th>
+                <th>Description</th>
+                <th>Value</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history: ${walletHistory}">
+                <td>
+                    <span th:text="${history.getId()}"></span>
+                </td>
+                <td>
+                    <span th:text="${history.getEvent()}"></span>
+                </td>
+                <td>
+                    <span th:text="${history.getValue() + ' $JAVA'}"></span>
+                </td>
+                <td>
+                    <span th:text="${#temporals.format(history.getDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
 
 <footer>
     <div class="container-fluid bg-light text-center">
@@ -142,6 +108,7 @@
         </div>
     </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
