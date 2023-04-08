@@ -1,5 +1,6 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
+import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
@@ -9,6 +10,7 @@ import com.bogdanmierloiu.Java_Challenge.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -22,6 +24,17 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
     private final WalletRepository walletRepository;
     private final WalletMapper walletMapper;
     private final NftService nftService;
+    private final WalletHistoryService walletHistoryService;
+
+    public static String generateWalletAddress() {
+        final String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        final SecureRandom RANDOM = new SecureRandom();
+        final StringBuilder sb = new StringBuilder("0x");
+        for (int i = 0; i < 38; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+    }
 
     public Wallet createUserWallet() {
         Wallet wallet = new Wallet(100L, generateWalletAddress());
@@ -39,6 +52,16 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
         return walletRepository.save(wallet);
     }
 
+    public void sendTokens(Long senderWalletId, Long receiverWalletId, Long nrOfTokens) {
+        Wallet senderWallet = findWalletById(senderWalletId);
+        Wallet receiverWallet = findWalletById(receiverWalletId);
+        senderWallet.setNrOfTokens(senderWallet.getNrOfTokens() - nrOfTokens);
+        receiverWallet.setNrOfTokens(receiverWallet.getNrOfTokens() + nrOfTokens);
+        walletRepository.saveAll(Arrays.asList(senderWallet, receiverWallet));
+        //history
+        walletHistoryService.createTokenTransferEvent(senderWallet, receiverWallet, nrOfTokens);
+    }
+
     @Override
     public WalletResponse add(WalletRequest request) {
         return null;
@@ -51,7 +74,15 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
 
     @Override
     public WalletResponse findById(Long id) {
-        return null;
+        return walletMapper.map(walletRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("The wallet with " + id + " not found")
+        ));
+    }
+
+    public Wallet findWalletById(Long id) {
+        return walletRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("The wallet with " + id + " not found")
+        );
     }
 
     @Override
@@ -62,16 +93,6 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
     @Override
     public void delete(Long id) {
 
-    }
-
-    public static String generateWalletAddress() {
-        final String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        final SecureRandom RANDOM = new SecureRandom();
-        final StringBuilder sb = new StringBuilder("0x");
-        for (int i = 0; i < 38; i++) {
-            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
-        }
-        return sb.toString();
     }
 
 

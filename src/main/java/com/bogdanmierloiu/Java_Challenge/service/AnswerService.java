@@ -59,8 +59,8 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
             playerWhoPutTheQuestion.getWallet().setNrOfTokens(playerWhoPutTheQuestion.getWallet().getNrOfTokens() - question.getRewardTokens());
             answerRepository.save(answer);
 
-            walletHistoryService.createTransferTokensEvent("Received from", playerWhoPutTheQuestion, playerWhoAddAnswer, question);
-            walletHistoryService.createTransferTokensEvent("Sent to", playerWhoAddAnswer, playerWhoPutTheQuestion, question);
+            walletHistoryService.createRewardEvent("Received from", playerWhoPutTheQuestion, playerWhoAddAnswer, question);
+            walletHistoryService.createRewardEvent("Sent to", playerWhoAddAnswer, playerWhoPutTheQuestion, question);
 
             addNftReputationForPlayer(playerWhoAddAnswer);
         }

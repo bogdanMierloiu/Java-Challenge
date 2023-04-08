@@ -1,5 +1,6 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
+import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet_history.WalletHistoryResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -35,7 +37,7 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
         walletHistoryRepository.save(walletHistory);
     }
 
-    public void createTransferTokensEvent(String event, Player playerWhoPutQuestion, Player playerWhoAddAnswer, Question question) {
+    public void createRewardEvent(String event, Player playerWhoPutQuestion, Player playerWhoAddAnswer, Question question) {
         WalletHistory walletHistory = new WalletHistory();
         walletHistory.setDateTime(LocalDateTime.now());
         walletHistory.setEvent(event + " " + playerWhoPutQuestion.getName());
@@ -43,6 +45,25 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
         walletHistory.setValue(question.getRewardTokens());
         walletHistoryRepository.save(walletHistory);
     }
+
+    public void createTokenTransferEvent(Wallet senderWallet, Wallet receiverWallet, Long nrOfTokens) {
+        WalletHistory senderHistory = new WalletHistory();
+        senderHistory.setDateTime(LocalDateTime.now());
+        senderHistory.setEvent("Sent " + nrOfTokens + " to " + receiverWallet.getAddress());
+        senderHistory.setWallet(senderWallet);
+        senderHistory.setValue(-nrOfTokens);
+
+        WalletHistory receiverHistory = new WalletHistory();
+        receiverHistory.setDateTime(LocalDateTime.now());
+        receiverHistory.setEvent("Received " + nrOfTokens + " from " + senderWallet.getAddress());
+        receiverHistory.setWallet(receiverWallet);
+        receiverHistory.setValue(nrOfTokens);
+
+        walletHistoryRepository.saveAll(Arrays.asList(senderHistory, receiverHistory));
+    }
+
+
+
 
     @Override
     public WalletHistoryResponse add(WalletHistoryRequest request) {

@@ -64,87 +64,40 @@
             <div class="col-md-6 offset-md-3">
                 <div class="card text-center">
                     <div class="card-body">
-                        <h1 class="card-title" th:text="${player.name}"></h1>
-                        <hr>
                         <div class="row">
                             <div class="col">
-                                <h3><i class="bi bi-currency-dollar"></i>Tokens</h3>
                                 <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${wallet.getNrOfTokens() + ' $JAVA'}"></h2>
-                            </div>
-                            <div class="col">
-                                <h3><i class="bi bi-shield-shaded"></i> Reputation</h3>
-                                <h2 class="card-subtitle mb-2 text-muted"
-                                    th:text="${player.getReputation().getType()}"></h2>
+                                    th:text="${senderWallet.getNrOfTokens()} + ' $JAVA'"></h2>
                             </div>
                         </div>
+                        <hr>
                         <div class="row justify-content-center">
                             <div class="col-sm-6 col-md-4">
-                                <form th:action="@{/wallet/send-page/{senderWalletId}(senderWalletId=${wallet.getId()})}">
-                                    <button type="submit" class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
+                                <form th:action="@{/wallet/send}" method="post">
+                                    <div class="form-group-lg mb-3">
+                                        <input type="number" name="nrOfTokens" class="form-control"
+                                               placeholder="Nr. of tokens " required>
+                                    </div>
+                                    <div class="form-group-lg mb-3">
+                                        <select class="form-control multiple" name="receiverWalletId" required>
+                                            <option value="">Select player</option>
+                                            <option th:each="player : ${players}"
+                                                    th:unless="${player.getId() == senderPlayer.getId()}"
+                                                    th:value="${player.getWallet().getId()}"
+                                                    th:text="${player.getName()}"></option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" name="senderWalletId" th:value="${senderWallet.getId()}"/>
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
                                         Send
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-sm-6 col-md-4">
-                                <a th:href="@{'https://www.binance.com'}" target="_blank">
-                                    <button type="button"
-                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
-                                        Buy
-                                    </button>
-                                </a>
-                            </div>
                         </div>
-                        <hr>
-                        <div class="row justify-content-center">
-                            <p>Your wallet address:</p>
-                        </div>
-                        <div class="row justify-content-center">
-                            <p th:text="${wallet.getAddress()}" style="font-weight:bold;"></p>
-                        </div>
-                        <hr>
-                        <h3><i class="bi bi-palette"></i> NFTs</h3>
-                        <div th:each="nft : ${nftList}">
-                            <h4 th:text="${nft.getType()}"></h4>
-                            <img th:if="${nft.getType() == 'Young Explorer'}"
-                                 th:src="@{/images/young_explorer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Adventurer'}"
-                                 th:src="@{/images/adventurer.png}"
-                                 width="200" height="200">
-                            <img th:if="${nft.getType() == 'Cosmonaut'}"
-                                 th:src="@{/images/cosmonaut.png}"
-                                 width="200" height="200">
-                        </div>
+
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <h5>History</h5>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Value</th>
-                        <th>Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="history: ${walletHistory}">
-                        <td>
-                            <span th:text="${history.getEvent()}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${history.getValue() + ' $JAVA'}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#temporals.format(history.getDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

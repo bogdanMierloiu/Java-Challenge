@@ -33,7 +33,7 @@ public class PlayerMVCController {
         List<WalletHistoryResponse> walletHistory = walletHistoryService.findByWallet(player.getId());
         List<Nft> nftList = nftService.findByWallet(player.getWallet().getId());
         model.addAttribute("player", player);
-        model.addAttribute("wallet", wallet);   // optimize update tokens
+        model.addAttribute("wallet", wallet);
         model.addAttribute("walletHistory", walletHistory);
         model.addAttribute("nftList", nftList);
         return "player-account";

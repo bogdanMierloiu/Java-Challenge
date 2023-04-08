@@ -58,6 +58,10 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         return playerMapper.map(playerRepository.findAll());
     }
 
+    public List<PlayerResponse> getAllByName() {
+        return playerMapper.map(playerRepository.findAllOrderByName());
+    }
+
     public List<PlayerResponse> findAllByOrderByTokens(){
         return playerMapper.map(playerRepository.findAllByOrderByWalletNrOfTokensDesc());
     }
