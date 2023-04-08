@@ -2,6 +2,7 @@ package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
+import com.bogdanmierloiu.Java_Challenge.exception.AccessDeniedException;
 import com.bogdanmierloiu.Java_Challenge.security.AppUser;
 import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
 import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
@@ -12,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -30,68 +28,48 @@ public class AdminController {
     private final WalletHistoryService walletHistoryService;
     private final HttpSession session;
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessDeniedException(AccessDeniedException e) {
+        return "access-denied";
+    }
 
-    public static void checkUser(Authentication authentication, Model model, PlayerService playerService) {
-        String name;
-        try {
-            name = ((AppUser) authentication.getPrincipal()).getAttribute("name");
-        } catch (Exception e) {
-            name = ((AppUser) authentication.getPrincipal()).getUsername();
+    private void isAdmin() throws AccessDeniedException {
+        PlayerResponse playerFromSession = (PlayerResponse) session.getAttribute("player");
+        if (playerFromSession == null || !Objects.equals(playerFromSession.getName(), "admin")) {
+            throw new AccessDeniedException("Access denied");
         }
-        PlayerResponse playerResponse = playerService.findByName(name);
-        if (playerResponse == null) {
-            PlayerRequest player = new PlayerRequest();
-            player.setName(name);
-            playerResponse = playerService.add(player);
-        }
-        model.addAttribute("player", playerResponse);
     }
 
     @GetMapping("/admin-page")
-    public String goToAdminPage(Authentication authentication, Model model) {
-        checkUser(authentication, model, playerService);
+    public String goToAdminPage() throws AccessDeniedException {
+        isAdmin();
         return "admin-page";
     }
 
-    private boolean isAdmin() {
-        PlayerResponse playerFromSession = (PlayerResponse) session.getAttribute("player");
-        return Objects.equals(playerFromSession.getName(), "admin");
-    }
-
-
     @GetMapping("/all-players")
-    public String showAllPlayers(Model model) {
-        if (!isAdmin()) {
-            return "access-denied";
-        }
+    public String showAllPlayers(Model model) throws AccessDeniedException {
+        isAdmin();
         model.addAttribute("players", playerService.findAllByOrderByTokens());
         return "admin-all-players";
-
     }
 
     @GetMapping("/all-questions")
-    public String showAllQuestions(Model model) {
-        if (!isAdmin()) {
-            return "access-denied";
-        }
+    public String showAllQuestions(Model model) throws AccessDeniedException {
+        isAdmin();
         model.addAttribute("questions", questionService.getAll());
         return "admin-all-questions";
     }
 
     @GetMapping("/all-wallets")
-    public String showAllWallets(Model model) {
-        if (!isAdmin()) {
-            return "access-denied";
-        }
+    public String showAllWallets(Model model) throws AccessDeniedException {
+        isAdmin();
         model.addAttribute("wallets", walletService.getAll());
         return "admin-all-wallets";
     }
 
     @GetMapping("/wallet-history/{walletId}")
-    public String showWalletHistory(@PathVariable("walletId") String walletId, Model model) {
-        if (!isAdmin()) {
-            return "access-denied";
-        }
+    public String showWalletHistory(@PathVariable("walletId") String walletId, Model model) throws AccessDeniedException {
+        isAdmin();
         model.addAttribute("player", playerService.findByWalletId(Long.parseLong(walletId)));
         model.addAttribute("walletHistory", walletHistoryService.findByWallet(Long.parseLong(walletId)));
         return "admin-wallet-history";

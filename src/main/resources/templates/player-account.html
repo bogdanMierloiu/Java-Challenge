@@ -78,6 +78,30 @@
                                     th:text="${player.getReputation().getType()}"></h2>
                             </div>
                         </div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-6 col-md-4">
+                                <form th:action="@{/admin/all-players}">
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Players
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <form th:action="@{/admin/all-questions}">
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Questions
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <a th:href="@{'https://www.binance.com'}" target="_blank">
+                                    <button type="button"
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
+                                        Buy
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
                         <hr>
                         <h3><i class="bi bi-palette"></i> NFTs</h3>
                         <div th:each="nft : ${nftList}">
