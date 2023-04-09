@@ -1,8 +1,6 @@
 package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
-import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
-import com.bogdanmierloiu.Java_Challenge.entity.Answer;
 import com.bogdanmierloiu.Java_Challenge.exception.AccessDeniedException;
 import com.bogdanmierloiu.Java_Challenge.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -10,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Objects;
 
@@ -90,8 +87,15 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/questions-for-player/{playerId}")
+    public String viewQuestionsForPlayer(@PathVariable("playerId") Long playerId, Model model) {
+        model.addAttribute("questions", questionService.findAllByPlayer(playerId));
+        model.addAttribute("playerForQuestions", playerService.findById(playerId));
+        return "questions-for-player";
+    }
+
     @GetMapping("/answers-for-player/{playerId}")
-    public String viewAnswersForQuestion(@RequestParam("playerId") Long playerId, Model model) {
+    public String viewAnswersForPlayer(@PathVariable("playerId") Long playerId, Model model) {
         model.addAttribute("playerForAnswers", playerService.findById(playerId));
         model.addAttribute("answers", answerService.findAllByPlayerId(playerId));
         return "answers-for-player";

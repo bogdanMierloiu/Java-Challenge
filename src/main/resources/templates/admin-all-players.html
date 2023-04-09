@@ -86,7 +86,7 @@
                 <td>
                     <pre th:text="${player.getId()}"></pre>
                 </td>
-                <td>
+                <td th:if="${player.getName() != 'admin'}">
                     <span th:text="${player.getName()}"></span>
                 </td>
                 <td>
@@ -102,7 +102,15 @@
                 </td>
                 <td>
                     <div>
-                        <form th:action="@{/admin/answers-for-player/{playerId}}">
+                        <form th:action="@{/admin/questions-for-player/{playerId}(playerId=${player.getId()})}">
+                        <input type="hidden" th:value="${player.getId()}" name="playerId">
+                            <button type="submit" class="btn btn-outline-info my-2 my-sm-0">All questions</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <form th:action="@{/admin/answers-for-player/{playerId}(playerId=${player.getId()})}">
                             <input type="hidden" th:value="${player.getId()}" name="playerId">
                             <button type="submit" class="btn btn-outline-info my-2 my-sm-0">All answers</button>
                         </form>

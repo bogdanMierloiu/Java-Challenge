@@ -1,7 +1,6 @@
 Admin tools:
 
-- Page with all answers for a player ( button in "admin-all-players"), with check box and button for view challenge;
-- Button for view questions for a player in admin-all-players;
+
 - Button for block/unblock player (List<Player> blockedPlayers, and method to verify when a user try go log in + blocked
   player page(message: contact admin: phone number))
 

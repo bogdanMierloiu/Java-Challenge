@@ -42,7 +42,7 @@ public class QuestionMVCController {
     @GetMapping("/questions-for-player/{playerId}")
     public String viewAllQuestionsForPlayer(HttpSession session, Model model, @PathVariable("playerId") String playerId) {
         model.addAttribute("questions", questionService.findAllByPlayer(Long.parseLong(playerId)));
-        model.addAttribute("player", session.getAttribute("player"));
+        model.addAttribute("playerForQuestions", session.getAttribute("player"));
         return "questions-for-player";
     }
 
