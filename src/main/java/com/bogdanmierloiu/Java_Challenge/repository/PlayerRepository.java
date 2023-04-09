@@ -13,8 +13,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     List<Player> findAllByOrderByWalletNrOfTokensDesc();
 
-    @Query("SELECT p FROM Player p JOIN FETCH p.wallet w where w.address LIKE %:walletAddress% ")
-    Player findByWalletAddress(@Param("walletAddress") String walletAddress);
+    @Query("SELECT p FROM Player p JOIN FETCH p.wallet w where w.address LIKE %:input% OR p.name LIKE %:input%")
+    Player findByWalletAddressOrPlayerName(@Param("input") String input);
+
 
 
     @Query("SELECT p FROM Player p ORDER BY p.name ")

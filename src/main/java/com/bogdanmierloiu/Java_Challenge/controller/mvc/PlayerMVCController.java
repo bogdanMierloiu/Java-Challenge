@@ -41,9 +41,11 @@ public class PlayerMVCController {
     }
 
     @GetMapping("/find")
-    public String findByWalletAddress(@RequestParam("walletAddress") String walletAddress, Model model) {
+    public String findByWalletAddress(@RequestParam("input") String input, Model model, HttpSession session) {
         try {
-            model.addAttribute("playerFound", playerService.findByWalletAddress(walletAddress));
+            model.addAttribute("playerFound", playerService.findByWalletAddressOrPlayerName(input));
+            PlayerResponse sessionPlayer = (PlayerResponse) session.getAttribute("player");
+            model.addAttribute("sessionPlayer", sessionPlayer);
             return "player-found";
         } catch (NotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());

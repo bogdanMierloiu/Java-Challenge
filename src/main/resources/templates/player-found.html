@@ -12,6 +12,7 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -37,16 +38,6 @@
             </div>
         </div>
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
-            <div class="nav-item active" style="padding-right: 5px">
-                <form th:action="@{/player/find}" method="get">
-                    <label>
-                        <input type="text" name="walletAddress" required placeholder="wallet address/player name"/>
-                    </label>
-                    <button type="submit" class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-log-out"></span> Search
-                    </button>
-                </form>
-            </div>
             <div class="nav-item active">
                 <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
@@ -66,19 +57,66 @@
         </div>
     </div>
 </nav>
+
 <div class="content-wrap">
-    <div class="container-fluid">
+    <div class="container mt-5">
         <div class="row">
-            <div class="col-md-12">
-                <div class="jumbotron">
-                    <h1 class="display-4">Eroare de acces</h1>
-                    <hr class="my-4">
-                    <p class="lead">Nu ai acces la aceasta pagina!</p>
+            <div class="col-md-6 offset-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h1 class="card-title" th:text="${playerFound.name}"></h1>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <h3><i class="bi bi-currency-dollar"></i>Tokens</h3>
+                                <h2 class="card-subtitle mb-2 text-muted"
+                                    th:text="${playerFound.getWallet().getNrOfTokens() + ' $JAVA'}"></h2>
+                            </div>
+                            <div class="col">
+                                <h3><i class="bi bi-shield-shaded"></i> Reputation</h3>
+                                <h2 class="card-subtitle mb-2 text-muted"
+                                    th:text="${playerFound.getReputation().getType()}"></h2>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-sm-6 col-md-4">
+                                <form th:action="@{/wallet/send-page/{senderWalletId}(senderWalletId=${sessionPlayer.getId()})}">
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">
+                                        Send tokens
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row justify-content-center">
+                            <p>wallet address:</p>
+                        </div>
+                        <div class="row justify-content-center">
+                            <p th:text="${playerFound.getWallet().getAddress()}" style="font-weight:bold;"></p>
+                        </div>
+                        <hr>
+                        <h3><i class="bi bi-palette"></i> NFTs</h3>
+                        <div th:each="nft : ${playerFound.getWallet().getNfts()}">
+                            <h4 th:text="${nft.getType()}"></h4>
+                            <img th:if="${nft.getType() == 'Young Explorer'}"
+                                 th:src="@{/images/young_explorer.png}"
+                                 width="200" height="200">
+                            <img th:if="${nft.getType() == 'Adventurer'}"
+                                 th:src="@{/images/adventurer.png}"
+                                 width="200" height="200">
+                            <img th:if="${nft.getType() == 'Cosmonaut'}"
+                                 th:src="@{/images/cosmonaut.png}"
+                                 width="200" height="200">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
+
 <footer>
     <div class="container-fluid bg-light text-center">
         <div class="row">
@@ -95,5 +133,16 @@
         </div>
     </div>
 </footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>

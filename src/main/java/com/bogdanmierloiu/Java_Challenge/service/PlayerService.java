@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,8 +52,8 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         return playerMapper.map(playerRepository.findByWalletId(walletId));
     }
 
-    public PlayerResponse findByWalletAddress(String walletAddress) {
-        Player player = playerRepository.findByWalletAddress(walletAddress);
+    public PlayerResponse findByWalletAddressOrPlayerName(String input) {
+        Player player = playerRepository.findByWalletAddressOrPlayerName(input.trim());
         if (player == null) {
             throw new NotFoundException("Player not found !");
         }
