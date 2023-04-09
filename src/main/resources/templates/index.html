@@ -38,6 +38,14 @@
         </div>
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
             <div class="nav-item active">
+                <form th:action="@{/find}" method="get">
+                    <label>
+                        <input type="text" name="walletAddress" required placeholder="Insert wallet address"/>
+                    </label>
+                    <button type="submit" class="btn btn-outline-info my-2 my-sm-0">Search</button>
+                </form>
+            </div>
+            <div class="nav-item active">
                 <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

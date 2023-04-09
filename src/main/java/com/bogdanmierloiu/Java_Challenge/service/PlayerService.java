@@ -34,7 +34,7 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
             Wallet adminWallet = walletService.createAdminWallet();
             playerToSave.setWallet(adminWallet);
             playerToSave.setReputation(reputationService.createCosmonautReputation());
-            walletHistoryService.createBonusEvent("Received: New player bonus", adminWallet);
+            walletHistoryService.createBonusEvent("Admin tokens ", adminWallet);
         } else {
             Wallet wallet = walletService.createUserWallet();
             playerToSave.setWallet(wallet);
@@ -49,8 +49,16 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         return playerMapper.map(playerRepository.findByName(name));
     }
 
-    public PlayerResponse findByWalletId(Long walletId){
+    public PlayerResponse findByWalletId(Long walletId) {
         return playerMapper.map(playerRepository.findByWalletId(walletId));
+    }
+
+    public PlayerResponse findByWalletAddress(String walletAddress) {
+        Player player = playerRepository.findByWalletAddress(walletAddress);
+        if (player == null) {
+            throw new NotFoundException("Player not found !");
+        }
+        return playerMapper.map(player);
     }
 
     @Override
@@ -62,7 +70,7 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         return playerMapper.map(playerRepository.findAllOrderByName());
     }
 
-    public List<PlayerResponse> findAllByOrderByTokens(){
+    public List<PlayerResponse> findAllByOrderByTokens() {
         return playerMapper.map(playerRepository.findAllByOrderByWalletNrOfTokensDesc());
     }
 

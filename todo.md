@@ -6,7 +6,6 @@ Admin tools:
   player page(message: contact admin: phone number))
 
 - Find by wallet address
-- Send tokens from player to player, and bonus from admin button
 
 - Delete/Update question
 - validate question and answer for vulgar words, swearing

@@ -37,25 +37,33 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
         walletHistoryRepository.save(walletHistory);
     }
 
-    public void createRewardEvent(String event, Player playerWhoPutQuestion, Player playerWhoAddAnswer, Question question) {
-        WalletHistory walletHistory = new WalletHistory();
-        walletHistory.setDateTime(LocalDateTime.now());
-        walletHistory.setEvent(event + " " + playerWhoPutQuestion.getName());
-        walletHistory.setWallet(playerWhoAddAnswer.getWallet());
-        walletHistory.setValue(question.getRewardTokens());
-        walletHistoryRepository.save(walletHistory);
+    public void createRewardEvent( Player playerWhoPutQuestion , Player playerWhoAddAnswer, Question question) {
+        WalletHistory senderHistory = new WalletHistory();
+        senderHistory.setWallet(playerWhoPutQuestion.getWallet());
+        senderHistory.setDateTime(LocalDateTime.now());
+        senderHistory.setEvent("Sent to " + playerWhoAddAnswer.getName());
+        senderHistory.setValue(-question.getRewardTokens());
+
+        WalletHistory receiverHistory = new WalletHistory();
+        receiverHistory.setWallet(playerWhoAddAnswer.getWallet());
+        receiverHistory.setDateTime(LocalDateTime.now());
+        receiverHistory.setEvent("Received from " + playerWhoPutQuestion.getName());
+        receiverHistory.setValue(question.getRewardTokens());
+
+        walletHistoryRepository.saveAll(Arrays.asList(senderHistory, receiverHistory));
     }
+
 
     public void createTokenTransferEvent(Wallet senderWallet, Wallet receiverWallet, Long nrOfTokens) {
         WalletHistory senderHistory = new WalletHistory();
         senderHistory.setDateTime(LocalDateTime.now());
-        senderHistory.setEvent("Sent " + nrOfTokens + " to " + receiverWallet.getAddress());
+        senderHistory.setEvent("Sent to " + receiverWallet.getAddress());
         senderHistory.setWallet(senderWallet);
         senderHistory.setValue(-nrOfTokens);
 
         WalletHistory receiverHistory = new WalletHistory();
         receiverHistory.setDateTime(LocalDateTime.now());
-        receiverHistory.setEvent("Received " + nrOfTokens + " from " + senderWallet.getAddress());
+        receiverHistory.setEvent("Received from " + senderWallet.getAddress());
         receiverHistory.setWallet(receiverWallet);
         receiverHistory.setValue(nrOfTokens);
 
