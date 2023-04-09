@@ -12,7 +12,6 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -68,44 +67,35 @@
         </div>
     </div>
 </nav>
-
 <div class="content-wrap">
-    <div th:if="${not #lists.isEmpty(questions)}" class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Question</th>
-                <th>Reward</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="question: ${questions}">
-                <td>
-                    <pre><code th:text="${question.getText()}"></code></pre>
-                </td>
-                <td>
-                    <span th:text="${question.getRewardTokens()}"></span>
-                </td>
-                <td>
-                    <span th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}"></span>
-                    <div th:if="${question.getIsResolved() == false}">
-                        <form th:action="@{/answer/add-answer-form/{id}(id=${question.getId()})}">
-                            <button class="btn btn-outline-info btn-sm" type="submit">View</button>
-                        </form>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 th:text="${'Answers from ' + playerForAnswers.getName()}"></h4>
+                        <hr>
+                        <div th:each="answer : ${answers}" class="mb-4">
+                            <h6 class="card-subtitle mb-2 text-muted">Question</h6>
+                            <pre><code th:text="${answer.getQuestion().getText()}"></code></pre>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="${'Answer from '+answer.getPlayer().getName()}"></h6>
+                            <pre><code th:text="${answer.getText()}"></code></pre>
+                            <div th:if="${answer.getIsValid()}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="correctAnswer" checked disabled>
+                                    <label class="form-check-label" for="correctAnswer">
+                                        Valid Answer
+                                    </label>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
                     </div>
-                    <div th:if="${question.getIsResolved() == true}">
-                        <form th:action="@{/question/answers-for-question/{questionId}(questionId=${question.getId()})}">
-                            <button class="btn btn-outline-info btn-sm" type="submit">View</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 <footer>
     <div class="container-fluid bg-light text-center">
         <div class="row">
@@ -122,6 +112,7 @@
         </div>
     </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

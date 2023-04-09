@@ -1,11 +1,10 @@
 Admin tools:
-- Find by wallet address for all players
+
 - Page with all answers for a player ( button in "admin-all-players"), with check box and button for view challenge;
 - Button for view questions for a player in admin-all-players;
 - Button for block/unblock player (List<Player> blockedPlayers, and method to verify when a user try go log in + blocked
   player page(message: contact admin: phone number))
 
-- Find by wallet address
 
 - Delete/Update question
 - validate question and answer for vulgar words, swearing
@@ -16,6 +15,6 @@ Admin tools:
 - Search by date in wallet history
 - Show all transaction for a date
 
-
+- Add localDateTime for question, and answer ( date posted)
 
 

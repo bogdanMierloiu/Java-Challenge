@@ -73,13 +73,13 @@
             <div class="col-md-8 offset-md-2">
                 <div class="card">
                     <div class="card-body">
-                        <pre th:text="${question.getText()}"></pre>
+                        <pre><code th:text="${question.getText()}"></code></pre>
                         <hr>
                         <h5>Answers</h5>
                         <br>
                         <div th:each="answer : ${answers}" class="mb-4">
                             <h6 class="card-subtitle mb-2 text-muted" th:text="${answer.getPlayer().getName()}"></h6>
-                            <pre th:text="${answer.getText()}"></pre>
+                            <pre><code th:text="${answer.getText()}"></code></pre>
                             <div th:if="${answer.getIsValid()}">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="correctAnswer" checked disabled>

@@ -100,6 +100,14 @@
                         <ul th:text="${nft.getType()}"></ul>
                     </li>
                 </td>
+                <td>
+                    <div>
+                        <form th:action="@{/admin/answers-for-player/{playerId}}">
+                            <input type="hidden" th:value="${player.getId()}" name="playerId">
+                            <button type="submit" class="btn btn-outline-info my-2 my-sm-0">All answers</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>

@@ -75,7 +75,7 @@
             <div class="col-md-8 offset-md-2">
                 <div class="card">
                     <div class="card-body">
-                        <pre class="card-text" th:text="${question.text}"></pre>
+                        <pre><code class="card-text" th:text="${question.text}"></code></pre>
                         <form class="add-form" th:action="@{/answer/add}" method="post">
                             <div class="form-group">
                                 <label for="answerText">Insert your answer:</label>
@@ -95,7 +95,7 @@
                         <br>
                         <div th:each="answer : ${answers}" class="mb-4">
                             <h6 class="card-subtitle mb-2 text-muted" th:text="${answer.getPlayer().getName()}"></h6>
-                            <pre th:text="${answer.getText()}"></pre>
+                            <pre><code th:text="${answer.getText()}"></code></pre>
                             <div th:if="${playerId == questionOwner.id}">
                                 <form th:action="@{/answer/validate/{answerId}/{playerId}/{questionId}(answerId=${answer.getId()},playerId=${answer.getPlayer().getId()},questionId=${question.getId()})}">
                                     <button class="btn btn-outline-success my-2 my-sm-0" type="button"

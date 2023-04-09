@@ -1,11 +1,10 @@
 package com.bogdanmierloiu.Java_Challenge.controller.mvc;
 
+import com.bogdanmierloiu.Java_Challenge.dto.answer.AnswerResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
+import com.bogdanmierloiu.Java_Challenge.entity.Answer;
 import com.bogdanmierloiu.Java_Challenge.exception.AccessDeniedException;
-import com.bogdanmierloiu.Java_Challenge.service.PlayerService;
-import com.bogdanmierloiu.Java_Challenge.service.QuestionService;
-import com.bogdanmierloiu.Java_Challenge.service.WalletHistoryService;
-import com.bogdanmierloiu.Java_Challenge.service.WalletService;
+import com.bogdanmierloiu.Java_Challenge.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +23,8 @@ public class AdminController {
     private final QuestionService questionService;
     private final WalletService walletService;
     private final WalletHistoryService walletHistoryService;
+
+    private final AnswerService answerService;
     private final HttpSession session;
 
 
@@ -87,6 +88,13 @@ public class AdminController {
         } catch (AccessDeniedException ex) {
             return "access-denied";
         }
+    }
+
+    @GetMapping("/answers-for-player/{playerId}")
+    public String viewAnswersForQuestion(@RequestParam("playerId") Long playerId, Model model) {
+        model.addAttribute("playerForAnswers", playerService.findById(playerId));
+        model.addAttribute("answers", answerService.findAllByPlayerId(playerId));
+        return "answers-for-player";
     }
 
 

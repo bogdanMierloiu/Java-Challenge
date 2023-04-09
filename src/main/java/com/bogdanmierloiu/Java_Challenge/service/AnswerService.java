@@ -84,6 +84,10 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
         }
     }
 
+    public List<AnswerResponse> findAllByPlayerId(Long playerId) {
+        return answerMapper.map(answerRepository.findAllByPlayerId(playerId));
+    }
+
 
     @Override
     public List<AnswerResponse> getAll() {
