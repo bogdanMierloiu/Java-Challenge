@@ -1,11 +1,17 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
 import com.bogdanmierloiu.Java_Challenge.dto.player.PlayerResponse;
+import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionRequest;
+import com.bogdanmierloiu.Java_Challenge.dto.question.QuestionResponse;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletRequest;
 import com.bogdanmierloiu.Java_Challenge.dto.wallet.WalletResponse;
 import com.bogdanmierloiu.Java_Challenge.entity.Player;
+import com.bogdanmierloiu.Java_Challenge.entity.Question;
 import com.bogdanmierloiu.Java_Challenge.entity.Wallet;
+import com.bogdanmierloiu.Java_Challenge.exception.NotEnoughTokens;
 import com.bogdanmierloiu.Java_Challenge.mapper.WalletMapper;
+import com.bogdanmierloiu.Java_Challenge.repository.PlayerRepository;
+import com.bogdanmierloiu.Java_Challenge.repository.QuestionRepository;
 import com.bogdanmierloiu.Java_Challenge.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +30,8 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
     private final WalletRepository walletRepository;
     private final WalletMapper walletMapper;
     private final NftService nftService;
+    private final QuestionRepository questionRepository;
+    private final PlayerRepository playerRepository;
     private final WalletHistoryService walletHistoryService;
 
     public static String generateWalletAddress() {
@@ -52,14 +60,26 @@ public class WalletService implements CrudOperation<WalletRequest, WalletRespons
         return walletRepository.save(wallet);
     }
 
-    public void sendTokens(Long senderWalletId, Long receiverWalletId, Long nrOfTokens) {
+    public void sendTokens(Long senderWalletId, Long receiverWalletId, Long nrOfTokens) throws NotEnoughTokens {
         Wallet senderWallet = findWalletById(senderWalletId);
         Wallet receiverWallet = findWalletById(receiverWalletId);
+        if (!checkTokensBeforeSend(senderWallet, nrOfTokens)) {
+            throw new NotEnoughTokens("Not enough tokens available!");
+        }
         senderWallet.setNrOfTokens(senderWallet.getNrOfTokens() - nrOfTokens);
         receiverWallet.setNrOfTokens(receiverWallet.getNrOfTokens() + nrOfTokens);
         walletRepository.saveAll(Arrays.asList(senderWallet, receiverWallet));
         //history
         walletHistoryService.createTokenTransferEvent(senderWallet, receiverWallet, nrOfTokens);
+    }
+
+    public Boolean checkTokensBeforeSend(Wallet senderWallet, Long nrOfTokensToTransfer) {
+        List<Question> playerQuestions = questionRepository.findAllByPlayerIdAndIsResolvedFalse(senderWallet.getId());
+        Long tokensReserved = 0L;
+        for (var playerQuestion : playerQuestions) {
+            tokensReserved += playerQuestion.getRewardTokens();
+        }
+        return senderWallet.getNrOfTokens() >= tokensReserved + nrOfTokensToTransfer;
     }
 
     @Override

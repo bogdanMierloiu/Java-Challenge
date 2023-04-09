@@ -24,7 +24,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
 
     public void addFromPlayer(QuestionRequest questionRequest) throws NotEnoughTokens, DataIntegrityViolationException {
         Player playerWhoPutQuestion = playerService.findByIdReturnPlayer(questionRequest.getPlayerId());
-        if (!checkPlayerTokens(playerWhoPutQuestion, questionRequest)) {
+        if (!checkTokensBeforeQuestion(playerWhoPutQuestion, questionRequest)) {
             throw new NotEnoughTokens("Not enough tokens available!");
         }
         if(questionRequest.getText().length()>2000){
@@ -36,7 +36,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         questionMapper.map(questionRepository.save(questionToSave));
     }
 
-    public Boolean checkPlayerTokens(Player player, QuestionRequest question) {
+    public Boolean checkTokensBeforeQuestion(Player player, QuestionRequest question) {
         List<QuestionResponse> playerQuestions = findAllByPlayerAndIsResolvedFalse(player.getId());
         Long tokensReserved = 0L;
         for (var playerQuestion : playerQuestions) {
