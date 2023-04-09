@@ -82,11 +82,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="player: ${players}">
+            <tr th:if="${player.getName() != 'admin'}" th:each="player: ${players}">
                 <td>
                     <pre th:text="${player.getId()}"></pre>
                 </td>
-                <td th:if="${player.getName() != 'admin'}">
+                <td>
                     <span th:text="${player.getName()}"></span>
                 </td>
                 <td>
@@ -103,7 +103,7 @@
                 <td>
                     <div>
                         <form th:action="@{/admin/questions-for-player/{playerId}(playerId=${player.getId()})}">
-                        <input type="hidden" th:value="${player.getId()}" name="playerId">
+                            <input type="hidden" th:value="${player.getId()}" name="playerId">
                             <button type="submit" class="btn btn-outline-info my-2 my-sm-0">All questions</button>
                         </form>
                     </div>
@@ -113,6 +113,26 @@
                         <form th:action="@{/admin/answers-for-player/{playerId}(playerId=${player.getId()})}">
                             <input type="hidden" th:value="${player.getId()}" name="playerId">
                             <button type="submit" class="btn btn-outline-info my-2 my-sm-0">All answers</button>
+                        </form>
+                    </div>
+                </td>
+                <td th:if="${!player.getIsBlocked()}">
+                    <div>
+                        <form th:action="@{/admin/block/{playerId}(playerId=${player.getId()})}">
+                            <input type="hidden" th:value="${player.getId()}" name="playerId">
+                            <button class="btn btn-outline-danger my-2 my-sm-0" type="button"
+                                    onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Block
+                            </button>
+                        </form>
+                    </div>
+                </td>
+                <td th:if="${player.getIsBlocked()}">
+                    <div>
+                        <form th:action="@{/admin/unblock/{playerId}(playerId=${player.getId()})}">
+                            <input type="hidden" th:value="${player.getId()}" name="playerId">
+                            <button class="btn btn-outline-danger my-2 my-sm-0" type="button"
+                                    onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Unblock
+                            </button>
                         </form>
                     </div>
                 </td>

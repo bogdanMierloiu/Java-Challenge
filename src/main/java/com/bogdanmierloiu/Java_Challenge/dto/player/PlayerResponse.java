@@ -13,7 +13,7 @@ public class PlayerResponse {
     private String name;
     private ReputationResponse reputation;
     private WalletResponse wallet;
-
+    private Boolean isBlocked;
 
 
     public PlayerResponse(Long id, String name) {

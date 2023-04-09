@@ -12,6 +12,5 @@ public class WalletHistoryResponse {
     private LocalDateTime dateTime;
     public String event;
     private Long value;
-
     private WalletResponse wallet;
 }

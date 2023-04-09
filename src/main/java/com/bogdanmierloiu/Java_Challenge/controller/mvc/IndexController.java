@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class IndexController {
     private final PlayerService playerService;
     private final QuestionService questionService;
+
     public static void identifyPlayer(Authentication authentication, Model model, PlayerService playerService) {
         String name;
         try {
@@ -32,12 +33,18 @@ public class IndexController {
             PlayerRequest player = new PlayerRequest();
             player.setName(name);
             playerResponse = playerService.add(player);
+        } else if (playerResponse.getIsBlocked()) {
+            model.addAttribute("accessDenied", true);
         }
         model.addAttribute("player", playerResponse);
     }
+
     @GetMapping
     public String goToIndex(Authentication authentication, Model model) {
         identifyPlayer(authentication, model, playerService);
+        if (model.containsAttribute("accessDenied")) {
+            return "player-blocked";
+        }
         model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
         return "index";
     }

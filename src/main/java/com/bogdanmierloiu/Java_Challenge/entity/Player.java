@@ -21,6 +21,9 @@ public class Player {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false)
+    private Boolean isBlocked;
+
     @ManyToOne
     @JoinColumn(name = "reputation_id")
     @ToString.Exclude
@@ -30,6 +33,7 @@ public class Player {
     @JoinColumn(name = "wallet_id")
     @ToString.Exclude
     private Wallet wallet;
+
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

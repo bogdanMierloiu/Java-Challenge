@@ -101,5 +101,28 @@ public class AdminController {
         return "answers-for-player";
     }
 
+    @GetMapping("/block/{playerId}")
+    public String blockPlayer(@PathVariable("playerId") Long playerId, Model model) {
+        try {
+            isAdmin();
+           playerService.blockPlayer(playerId);
+            model.addAttribute("players", playerService.findAllByOrderByTokens());
+            return "admin-all-players";
+        } catch (AccessDeniedException ex) {
+            return "access-denied";
+        }
+    }
+
+    @GetMapping("/unblock/{playerId}")
+    public String unblockPlayer(@PathVariable("playerId") Long playerId, Model model) {
+        try {
+            isAdmin();
+            playerService.unblockPlayer(playerId);
+            model.addAttribute("players", playerService.findAllByOrderByTokens());
+            return "admin-all-players";
+        } catch (AccessDeniedException ex) {
+            return "access-denied";
+        }
+    }
 
 }

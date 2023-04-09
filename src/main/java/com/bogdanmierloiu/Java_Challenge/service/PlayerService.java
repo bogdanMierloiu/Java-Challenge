@@ -33,12 +33,14 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
             Wallet adminWallet = walletService.createAdminWallet();
             playerToSave.setWallet(adminWallet);
             playerToSave.setReputation(reputationService.createCosmonautReputation());
+            playerToSave.setIsBlocked(false);
             walletHistoryService.createBonusEvent("Admin tokens ", adminWallet);
         } else {
             Wallet wallet = walletService.createUserWallet();
             playerToSave.setWallet(wallet);
             playerToSave.setReputation(reputationService.createYoungExplorerReputation());
             playerToSave.getWallet().getNfts().add(nftService.createYoungExplorerNFT());
+            playerToSave.setIsBlocked(false);
             walletHistoryService.createBonusEvent("Received: New player bonus", wallet);
         }
         return playerMapper.map(playerRepository.save(playerToSave));
@@ -46,6 +48,17 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
 
     public PlayerResponse findByName(String name) {
         return playerMapper.map(playerRepository.findByName(name));
+    }
+
+    public void blockPlayer(Long playerId) {
+        Player player = playerRepository.findById(playerId).orElseThrow();
+        player.setIsBlocked(true);
+        playerRepository.save(player);
+    }
+    public void unblockPlayer(Long playerId) {
+        Player player = playerRepository.findById(playerId).orElseThrow();
+        player.setIsBlocked(false);
+        playerRepository.save(player);
     }
 
     public PlayerResponse findByWalletId(Long walletId) {
