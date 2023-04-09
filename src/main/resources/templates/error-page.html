@@ -40,7 +40,8 @@
             <div class="nav-item active" style="padding-right: 5px">
                 <form th:action="@{/player/find}" method="get">
                     <label>
-                        <input type="text" name="walletAddress" required placeholder="wallet address/player name"/>
+                        <input class="form-control mr-sm-2" type="search" aria-label="Search" name="input"
+                               required placeholder="wallet address/player name"/>
                     </label>
                     <button type="submit" class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-log-out"></span> Search

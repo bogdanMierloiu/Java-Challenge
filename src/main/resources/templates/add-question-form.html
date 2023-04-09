@@ -38,6 +38,17 @@
             </div>
         </div>
         <div class="navbar-nav ml-auto justify-content-end align-items-center">
+            <div class="nav-item active" style="padding-right: 5px">
+                <form th:action="@{/player/find}" method="get">
+                    <label>
+                        <input class="form-control mr-sm-2" type="search" aria-label="Search" name="input"
+                               required placeholder="wallet address/player name"/>
+                    </label>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-log-out"></span> Search
+                    </button>
+                </form>
+            </div>
             <div class="nav-item active">
                 <a class="navbar-brand" th:href="@{/player/account}">
                     Wallet
