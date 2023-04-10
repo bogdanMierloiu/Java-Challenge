@@ -72,14 +72,17 @@
 <div class="content-wrap">
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card text-center">
+            <div class="col-md-12">
+                <h2 class="text-center mb-5">Search Results</h2>
+            </div>
+            <div class="col-md-6" th:each="playerFound, iterStat : ${playersFound}">
+                <div class="card text-center mb-5">
                     <div class="card-body">
                         <h1 class="card-title" th:text="${playerFound.name}"></h1>
                         <hr>
                         <div class="row">
                             <div class="col">
-                                <h3><i class="bi bi-currency-dollar"></i>Tokens</h3>
+                                <h3><i class="bi bi-currency-dollar"></i> Tokens</h3>
                                 <h2 class="card-subtitle mb-2 text-muted"
                                     th:text="${playerFound.getWallet().getNrOfTokens() + ' $JAVA'}"></h2>
                             </div>
@@ -124,7 +127,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

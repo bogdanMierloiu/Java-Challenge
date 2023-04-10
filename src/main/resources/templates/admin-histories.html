@@ -12,6 +12,7 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">Java Challenge</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -69,42 +70,38 @@
 </nav>
 
 <div class="content-wrap">
-
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card-deck">
-                    <div class="card" style="min-width: 18rem;" th:each="question : ${questions}">
-                        <div class="card-body">
-                            <h5 class="card-title"
-                                th:text="${#strings.length(question.getText()) &lt;= 50 ? question.getText() : #strings.substring(question.getText(), 0, 50) + '...'}"></h5>
-                            <hr>
-                            <p class="card-text text-muted"
-                               th:text="${'Posted by ' + question.getPlayer().getName()}"></p>
-                            <p class="card-text" th:text="${'Reward: ' + question.getRewardTokens() + ' $JAVA'}"></p>
-                            <p class="card-text text-muted"
-                               th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}"></p>
-                            <form th:action="@{/question/answers-for-question/{questionId}(questionId=${question.getId()})}">
-                                <button class="btn btn-outline-success btn-sm" type="submit">View</button>
-                            </form>
-                            <div class="d-flex flex-column button-group">
-                                <form th:action="@{/question/update-page}">
-                                    <input type="hidden" name="questionId" th:value="${question.getId()}">
-                                    <button class="btn btn-outline-info btn-sm" type="submit">Update</button>
-                                </form>
-                                <form th:action="@{/question/delete/{id}(id=${question.getId()})}">
-                                    <button class="btn btn-outline-danger btn-sm" type="button"
-                                            onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Transaction hash</th>
+                <th>Wallet address</th>
+                <th>Description</th>
+                <th>Value</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history: ${histories}">
+                <td>
+                    <span th:text="${history.getId()}"></span>
+                </td>
+                <td>
+                    <span th:text="${history.getWallet().getAddress()}"></span>
+                </td>
+                <td>
+                    <span th:text="${history.getEvent()}"></span>
+                </td>
+                <td>
+                    <span th:text="${history.getValue() + ' $JAVA'}"></span>
+                </td>
+                <td>
+                    <span th:text="${#temporals.format(history.getDateTime(), 'dd-MM-yyyy HH:mm')}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-
 </div>
 
 
@@ -117,14 +114,14 @@
                 <p class="text-muted mb-0">Made with <i class="fas fa-heart text-danger"></i> for programming </p>
                 <div class="text-center">
                     <p class="text-muted mb-0 d-inline-block"><i class="fas fa-phone"></i> +40-761495719</p>
-                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-map-marker-alt"></i> Romania, Bucharest
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-map-marker-alt"></i> Romania,
+                        Bucharest
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </footer>
-
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

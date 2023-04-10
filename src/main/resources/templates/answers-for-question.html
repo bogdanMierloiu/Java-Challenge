@@ -88,6 +88,18 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="d-flex flex-column button-group">
+                                <form th:action="@{/answer/update-page}">
+                                    <input type="hidden" name="answerId" th:value="${answer.getId()}">
+                                    <button class="btn btn-outline-info btn-sm" type="submit">Update</button>
+                                </form>
+                                <form th:action="@{/answer/delete/{answerId}/{questionId}(answerId=${answer.getId()},
+                                 questionId=${question.getId()})}">
+                                    <button class="btn btn-outline-danger btn-sm" type="button"
+                                            onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Delete
+                                    </button>
+                                </form>
+                            </div>
                             <hr>
                         </div>
                     </div>

@@ -69,33 +69,57 @@
 </nav>
 
 <div class="content-wrap">
-    <div style="padding:5px">
-        <h2>Admin Tools</h2>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-sm-6 col-md-4">
-            <form th:action="@{/admin/all-players}">
-                <button type="submit"
-                        class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Players
-                </button>
-            </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center mb-5">
+                <h2>Admin Tools</h2>
+            </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <form th:action="@{/admin/all-questions}">
-                <button type="submit"
-                        class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Questions
-                </button>
-            </form>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <form th:action="@{/admin/all-wallets}">
-                <button type="submit"
-                        class="btn btn-outline-success btn-block d-flex align-items-center justify-content-center">All Wallets
-                </button>
-            </form>
+        <div class="row justify-content-center">
+            <div class="col-sm-6 col-md-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">All Players</h3>
+                        <form th:action="@{/admin/all-players}">
+                            <button type="submit" class="btn btn-success btn-block">View</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">All Questions</h3>
+                        <form th:action="@{/admin/all-questions}">
+                            <button type="submit" class="btn btn-success btn-block">View</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">All Wallets</h3>
+                        <form th:action="@{/admin/all-wallets}">
+                            <button type="submit" class="btn btn-success btn-block">View</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title">History</h3>
+                        <form th:action="@{/admin/history}">
+                            <button type="submit" class="btn btn-success btn-block">View</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 
 <footer>
