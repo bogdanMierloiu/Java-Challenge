@@ -98,6 +98,8 @@ public class QuestionMVCController {
             model.addAttribute("questions", questionService.getAll());
             return "admin-all-questions";
         }
+        model.addAttribute("questions", questionService.findAllByPlayer(playerFromSession.getId()));
+        model.addAttribute("playerForQuestions", playerFromSession);
         return "questions-for-player";
     }
 

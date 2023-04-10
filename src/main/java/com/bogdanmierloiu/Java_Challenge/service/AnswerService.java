@@ -96,11 +96,16 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
 
     @Override
     public AnswerResponse findById(Long id) {
-        return null;
+        return answerMapper.map(answerRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Answer not found!")
+        ));
     }
 
     @Override
-    public AnswerResponse update(AnswerRequest request) {
+    public AnswerResponse update(AnswerRequest request) throws DataIntegrityViolationException {
+        if (request.getText().length() > 2000) {
+            throw new DataIntegrityViolationException("Answer is too long! Max : 2000 characters");
+        }
         Answer answerToUpdate = answerRepository.findById(request.getId()).orElseThrow(
                 () -> new NotFoundException("Answer not found"));
         answerToUpdate.setText(request.getText() != null ? request.getText() : answerToUpdate.getText());

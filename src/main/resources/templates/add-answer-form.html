@@ -110,9 +110,20 @@
                             <pre><code th:text="${answer.getText()}"></code></pre>
                             <div th:if="${playerId == questionOwner.id}">
                                 <form th:action="@{/answer/validate/{answerId}/{playerId}/{questionId}(answerId=${answer.getId()},playerId=${answer.getPlayer().getId()},questionId=${question.getId()})}">
-                                    <button class="btn btn-outline-success my-2 my-sm-0" type="button"
+                                    <button class="btn btn-outline-success btn-sm" type="button"
                                             onclick="if(confirm('Are you sure ? The $JAVA tokens set as a reward will be taken from your wallet' +
                                          ' and transferred to this person\'s wallet')) {this.form.submit();}">Validate
+                                    </button>
+                                </form>
+                            </div>
+                            <div th:if="${playerName == answer.getPlayer().getName() or playerName == 'admin'}" class="d-flex flex-column button-group">
+                                <form th:action="@{/answer/update-page}">
+                                    <input type="hidden" name="answerId" th:value="${answer.getId()}">
+                                    <button class="btn btn-outline-info btn-sm" type="submit">Update</button>
+                                </form>
+                                <form th:action="@{/answer/delete/{id}(id=${question.getId()})}">
+                                    <button class="btn btn-outline-danger btn-sm" type="button"
+                                            onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Delete
                                     </button>
                                 </form>
                             </div>

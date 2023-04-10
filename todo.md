@@ -1,6 +1,6 @@
 Admin tools:
 - Read me file update
-- Validate tokens before update question
+
 - validate question and answer for vulgar words, swearing
 
 - Update reputation/nft for player

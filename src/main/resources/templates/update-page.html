@@ -101,6 +101,32 @@
             </div>
         </div>
     </div>
+    <div th:if="${answer != null}" class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <hr>
+                        <form class="add-form" th:action="@{/answer/update}" method="post">
+                            <div class="form-group">
+                                <label for="questionText">Answer</label>
+                                <textarea name="text" rows="5" cols="50" required class="form-control"
+                                          th:text="${answerRequest.text} ?: ${answer.text}"></textarea>
+                            </div>
+                            <input type="hidden" th:value="${answer.id}" name="id">
+                            <input type="hidden" th:value="${answer.getQuestion().getId()}" name="questionId">
+                            <input type="hidden" th:value="${answer.getPlayer().getId()}" name="playerId">
+                            <input type="hidden" th:value="${answer.getIsValid()}" name="isValid">
+                            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Update</button>
+                            <p class="error-message" th:if="${errorMessage}">
+                                [[${errorMessage}]]
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer>
