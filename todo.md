@@ -1,6 +1,6 @@
 Admin tools:
-
-- Delete/Update question
+- Read me file update
+- Validate tokens before update question
 - validate question and answer for vulgar words, swearing
 
 - Update reputation/nft for player
@@ -9,5 +9,6 @@ Admin tools:
 - Show all transaction for a date
 
 - Add localDateTime for question, and answer ( date posted )
+- Report function from players to admin
 
 

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
         if (!checkTokensBeforeQuestion(playerWhoPutQuestion, questionRequest)) {
             throw new NotEnoughTokens("Not enough tokens available!");
         }
-        if(questionRequest.getText().length()>2000){
+        if (questionRequest.getText().length() > 2000) {
             throw new DataIntegrityViolationException("Question is too long! Max : 2000 characters");
         }
         Question questionToSave = questionMapper.map(questionRequest);
@@ -76,11 +77,20 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
 
     @Override
     public QuestionResponse update(QuestionRequest request) {
-        return null;
+        Question questionToUpdate = questionRepository.findById(request.getId()).orElseThrow(
+                () -> new NotFoundException("Question not found !")
+        );
+        questionToUpdate.setText(request.getText() != null ? request.getText() : questionToUpdate.getText());
+        questionToUpdate.setRewardTokens(request.getRewardTokens() != null ? request.getRewardTokens() : questionToUpdate.getRewardTokens());
+
+        return questionMapper.map(questionRepository.save(questionToUpdate));
     }
 
     @Override
     public void delete(Long id) {
-
+        Question questionToDelete = questionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Question not found !")
+        );
+        questionRepository.delete(questionToDelete);
     }
 }

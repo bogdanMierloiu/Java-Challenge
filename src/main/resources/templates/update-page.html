@@ -70,56 +70,36 @@
 </nav>
 
 <div class="content-wrap">
-    <div th:if="${not #lists.isEmpty(questions)}" class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Question</th>
-                <th>Reward</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="question: ${questions}">
-                <td>
-                    <pre><code th:text="${question.getText()}"></code></pre>
-                </td>
-                <td>
-                    <span th:text="${question.getRewardTokens()}"></span>
-                </td>
-                <td>
-                    <span th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}" style="padding: 5px"></span>
-                </td>
-                <td>
-                    <div class="d-flex flex-column button-group">
-                        <div th:if="${question.getIsResolved() == false}" class="button-group">
-                            <form th:action="@{/answer/add-answer-form/{id}(id=${question.getId()})}">
-                                <button class="btn btn-outline-success btn-sm" type="submit">View</button>
-                            </form>
-                        </div>
-                        <div th:if="${question.getIsResolved() == true}" class="button-group">
-                            <form th:action="@{/question/answers-for-question/{questionId}(questionId=${question.getId()})}">
-                                <button class="btn btn-outline-success btn-sm" type="submit">View</button>
-                            </form>
-                        </div>
-                        <form th:action="@{/question/update-page}">
-                            <input type="hidden" name="questionId" th:value="${question.getId()}">
-                            <button class="btn btn-outline-info btn-sm" type="submit">Update</button>
-                        </form>
-                        <form th:action="@{/question/delete/{id}(id=${question.getId()})}">
-                            <button class="btn btn-outline-danger btn-sm" type="button"
-                                    onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Delete
-                            </button>
+    <div th:if="${question != null}" class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        <hr>
+                        <form class="add-form" th:action="@{/question/update}" method="post">
+                            <div class="form-group">
+                                <label for="questionText">Question</label>
+                                <textarea id="questionText" name="text" rows="5" cols="50" required
+                                          class="form-control">[[${question?.text}]]</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="rewardTokens">Reward</label>
+                                <input type="number" id="rewardTokens" name="rewardTokens" min="1" required class="form-control"
+                                       th:value="${question?.rewardTokens}">
+                                <small class="form-text text-muted">Insert the number of $JAVA reward:</small>
+                            </div>
+                            <input type="hidden" th:value="${question.getId()}" name="id">
+                            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Update</button>
+                            <p class="error-message" th:if="${errorMessage}">
+                                [[${errorMessage}]]
+                            </p>
                         </form>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 
 <footer>
     <div class="container-fluid bg-light text-center">
@@ -137,6 +117,7 @@
         </div>
     </div>
 </footer>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

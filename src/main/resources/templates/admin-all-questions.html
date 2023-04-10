@@ -82,10 +82,22 @@
                             <p class="card-text text-muted"
                                th:text="${'Posted by ' + question.getPlayer().getName()}"></p>
                             <p class="card-text" th:text="${'Reward: ' + question.getRewardTokens() + ' $JAVA'}"></p>
-                            <p class="card-text text-muted" th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}"></p>
+                            <p class="card-text text-muted"
+                               th:text="${question.getIsResolved() ? 'Completed' : 'Pending'}"></p>
                             <a th:href="@{/question/answers-for-question/{questionId}(questionId=${question.getId()})}"
                                class="card-link">View
                                 challenge</a>
+                            <div class="d-flex flex-column button-group">
+                                <form th:action="@{/question/update-page}">
+                                    <input type="hidden" name="questionId" th:value="${question.getId()}">
+                                    <button class="btn btn-outline-info btn-sm" type="submit">Update</button>
+                                </form>
+                                <form th:action="@{/question/delete/{id}(id=${question.getId()})}">
+                                    <button class="btn btn-outline-danger btn-sm" type="button"
+                                            onclick="if(confirm('Are you sure ?')) {this.form.submit();}">Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

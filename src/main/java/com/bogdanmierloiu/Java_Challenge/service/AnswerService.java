@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 import java.util.Objects;
@@ -74,11 +75,11 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
     }
 
     public void addNftReputationForPlayer(Player playerWhoAddAnswer) {
-        if (validAnswersForPlayer(playerWhoAddAnswer) == 2) {
+        if (validAnswersForPlayer(playerWhoAddAnswer) == 3) {
             playerWhoAddAnswer.getWallet().getNfts().add(nftService.createAdventurerNFT());
             playerWhoAddAnswer.setReputation(reputationService.createAdventurerReputation());
         }
-        if (validAnswersForPlayer(playerWhoAddAnswer) == 3) {
+        if (validAnswersForPlayer(playerWhoAddAnswer) == 5) {
             playerWhoAddAnswer.getWallet().getNfts().add(nftService.createCosmonautNFT());
             playerWhoAddAnswer.setReputation(reputationService.createCosmonautReputation());
         }
@@ -88,11 +89,9 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
         return answerMapper.map(answerRepository.findAllByPlayerId(playerId));
     }
 
-
     @Override
     public List<AnswerResponse> getAll() {
-
-        return null;
+        return answerMapper.map(answerRepository.findAll());
     }
 
     @Override
@@ -102,11 +101,16 @@ public class AnswerService implements CrudOperation<AnswerRequest, AnswerRespons
 
     @Override
     public AnswerResponse update(AnswerRequest request) {
-        return null;
+        Answer answerToUpdate = answerRepository.findById(request.getId()).orElseThrow(
+                () -> new NotFoundException("Answer not found"));
+        answerToUpdate.setText(request.getText() != null ? request.getText() : answerToUpdate.getText());
+        return answerMapper.map(answerRepository.save(answerToUpdate));
     }
 
     @Override
     public void delete(Long id) {
-
+        Answer answerToDelete = answerRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Answer not found"));
+        answerRepository.delete(answerToDelete);
     }
 }

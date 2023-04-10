@@ -34,6 +34,7 @@ public class AnswerMVCController {
         PlayerResponse playerResponse = playerService.findByName(name);
         QuestionResponse question = questionService.findById(Long.parseLong(id));
         PlayerResponse questionOwner = question.getPlayer();
+        model.addAttribute("playerName", playerResponse.getName());
         model.addAttribute("playerId", playerResponse.getId());
         model.addAttribute("question", question);
         model.addAttribute("questionOwner", questionOwner);
