@@ -61,46 +61,47 @@ public class QuestionMVCController {
 
     @GetMapping("/update-page")
     public String goToUpdatePage(@RequestParam("questionId") Long questionId, Model model) {
-        try {
-            QuestionResponse questionToUpdate = questionService.findById(questionId);
-            model.addAttribute("question", questionToUpdate);
-            return "update-page";
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            QuestionResponse questionToUpdate = questionService.findById(questionId);
-            model.addAttribute("question", questionToUpdate);
-            return "update-page";
-        }
+        QuestionResponse questionToUpdate = questionService.findById(questionId);
+        model.addAttribute("question", questionToUpdate);
+        model.addAttribute("questionRequest", new QuestionRequest());
+        return "update-page";
     }
 
     @PostMapping("/update")
     public String updateQuestion(@ModelAttribute QuestionRequest questionRequest, Model model, HttpSession session) {
-        questionService.update(questionRequest);
-        PlayerResponse playerForQuestions = getPlayerFromSession(session);
-        model.addAttribute("questions", questionService.findAllByPlayer(playerForQuestions.getId()));
-        model.addAttribute("playerForQuestions", playerForQuestions);
-        if (Objects.equals(playerForQuestions.getName(), "admin")) {
-            model.addAttribute("questions", questionService.getAll());
-            return "admin-all-questions";
+        try {
+            questionService.update(questionRequest);
+            PlayerResponse playerFromSession = getPlayerFromSession(session);
+            model.addAttribute("questions", questionService.findAllByPlayer(playerFromSession.getId()));
+            model.addAttribute("playerForQuestions", playerFromSession);
+            if (Objects.equals(playerFromSession.getName(), "admin")) {
+                model.addAttribute("questions", questionService.getAll());
+                return "admin-all-questions";
+            }
+            return "questions-for-player";
+        } catch (NotEnoughTokens | DataIntegrityViolationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            QuestionResponse questionToUpdate = questionService.findById(questionRequest.getId());
+            model.addAttribute("questionRequest", questionRequest);
+            model.addAttribute("question", questionToUpdate);
+            return "update-page";
         }
-        return "questions-for-player";
-
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id, Model model, HttpSession session) {
         questionService.delete(id);
-        PlayerResponse playerForQuestions = getPlayerFromSession(session);
-        model.addAttribute("questions", questionService.findAllByPlayer(playerForQuestions.getId()));
-        model.addAttribute("playerForQuestions", playerForQuestions);
-        if (Objects.equals(playerForQuestions.getName(), "admin")) {
+        PlayerResponse playerFromSession = getPlayerFromSession(session);
+        model.addAttribute("questions", questionService.findAllByPlayer(playerFromSession.getId()));
+        model.addAttribute("playerForQuestions", playerFromSession);
+        if (Objects.equals(playerFromSession.getName(), "admin")) {
             model.addAttribute("questions", questionService.getAll());
             return "admin-all-questions";
         }
         return "questions-for-player";
     }
 
-    public PlayerResponse getPlayerFromSession(HttpSession session){
+    public PlayerResponse getPlayerFromSession(HttpSession session) {
         return (PlayerResponse) session.getAttribute("player");
     }
 

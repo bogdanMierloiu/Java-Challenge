@@ -1,5 +1,7 @@
 package com.bogdanmierloiu.Java_Challenge.service;
 
+import com.bogdanmierloiu.Java_Challenge.exception.NotEnoughTokens;
+
 import java.util.List;
 
 public interface CrudOperation<T, K> {
@@ -10,7 +12,7 @@ public interface CrudOperation<T, K> {
 
     K findById(Long id);
 
-    K update(T request);
+    K update(T request) throws NotEnoughTokens;
 
     void delete(Long id);
 }

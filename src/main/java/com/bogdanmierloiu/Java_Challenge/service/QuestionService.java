@@ -76,7 +76,13 @@ public class QuestionService implements CrudOperation<QuestionRequest, QuestionR
     }
 
     @Override
-    public QuestionResponse update(QuestionRequest request) {
+    public QuestionResponse update(QuestionRequest request) throws NotEnoughTokens {
+        if (!checkTokensBeforeQuestion(playerService.findByIdReturnPlayer(request.getPlayerId()), request)) {
+            throw new NotEnoughTokens("Not enough tokens available!");
+        }
+        if (request.getText().length() > 2000) {
+            throw new DataIntegrityViolationException("Question is too long! Max : 2000 characters");
+        }
         Question questionToUpdate = questionRepository.findById(request.getId()).orElseThrow(
                 () -> new NotFoundException("Question not found !")
         );
