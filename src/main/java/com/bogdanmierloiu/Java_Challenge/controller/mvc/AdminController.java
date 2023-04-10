@@ -20,7 +20,6 @@ public class AdminController {
     private final QuestionService questionService;
     private final WalletService walletService;
     private final WalletHistoryService walletHistoryService;
-
     private final AnswerService answerService;
     private final HttpSession session;
 
@@ -105,7 +104,7 @@ public class AdminController {
     public String blockPlayer(@PathVariable("playerId") Long playerId, Model model) {
         try {
             isAdmin();
-           playerService.blockPlayer(playerId);
+            playerService.blockPlayer(playerId);
             model.addAttribute("players", playerService.findAllByOrderByTokens());
             return "admin-all-players";
         } catch (AccessDeniedException ex) {
@@ -120,6 +119,17 @@ public class AdminController {
             playerService.unblockPlayer(playerId);
             model.addAttribute("players", playerService.findAllByOrderByTokens());
             return "admin-all-players";
+        } catch (AccessDeniedException ex) {
+            return "access-denied";
+        }
+    }
+
+    @GetMapping("/history")
+    public String getHistory(Model model) {
+        try {
+            isAdmin();
+            model.addAttribute("histories", walletHistoryService.getAll());
+            return "admin-histories";
         } catch (AccessDeniedException ex) {
             return "access-denied";
         }

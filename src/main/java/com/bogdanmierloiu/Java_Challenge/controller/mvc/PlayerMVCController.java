@@ -43,7 +43,7 @@ public class PlayerMVCController {
     @GetMapping("/find")
     public String findByWalletAddress(@RequestParam("input") String input, Model model, HttpSession session) {
         try {
-            model.addAttribute("playerFound", playerService.findByWalletAddressOrPlayerName(input));
+            model.addAttribute("playersFound", playerService.findByWalletAddressOrPlayerName(input));
             PlayerResponse sessionPlayer = (PlayerResponse) session.getAttribute("player");
             model.addAttribute("sessionPlayer", sessionPlayer);
             return "player-found";

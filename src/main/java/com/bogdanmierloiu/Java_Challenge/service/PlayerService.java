@@ -65,9 +65,9 @@ public class PlayerService implements CrudOperation<PlayerRequest, PlayerRespons
         return playerMapper.map(playerRepository.findByWalletId(walletId));
     }
 
-    public PlayerResponse findByWalletAddressOrPlayerName(String input) {
-        Player player = playerRepository.findByWalletAddressOrPlayerName(input.trim());
-        if (player == null) {
+    public List<PlayerResponse> findByWalletAddressOrPlayerName(String input) {
+        List<Player> player = playerRepository.findByWalletAddressOrPlayerName(input.trim());
+        if (player.isEmpty()) {
             throw new NotFoundException("Player not found !");
         }
         return playerMapper.map(player);

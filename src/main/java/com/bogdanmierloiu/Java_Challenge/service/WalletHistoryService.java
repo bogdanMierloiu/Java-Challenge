@@ -13,6 +13,7 @@ import com.bogdanmierloiu.Java_Challenge.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
         walletHistoryRepository.save(walletHistory);
     }
 
-    public void createRewardEvent( Player playerWhoPutQuestion , Player playerWhoAddAnswer, Question question) {
+    public void createRewardEvent(Player playerWhoPutQuestion, Player playerWhoAddAnswer, Question question) {
         WalletHistory senderHistory = new WalletHistory();
         senderHistory.setWallet(playerWhoPutQuestion.getWallet());
         senderHistory.setDateTime(LocalDateTime.now());
@@ -71,8 +72,6 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
     }
 
 
-
-
     @Override
     public WalletHistoryResponse add(WalletHistoryRequest request) {
         WalletHistory walletHistory = walletHistoryMapper.map(request);
@@ -87,12 +86,14 @@ public class WalletHistoryService implements CrudOperation<WalletHistoryRequest,
 
     @Override
     public List<WalletHistoryResponse> getAll() {
-        return null;
+        return walletHistoryMapper.map(walletHistoryRepository.findAll());
     }
 
     @Override
     public WalletHistoryResponse findById(Long id) {
-        return null;
+        return walletHistoryMapper.map(walletHistoryRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("History not found")
+        ));
     }
 
     @Override

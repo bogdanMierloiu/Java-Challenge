@@ -51,12 +51,21 @@ public class AnswerMVCController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute AnswerRequest answerRequest, Model model) {
+    public String add(@ModelAttribute AnswerRequest answerRequest, Model model, HttpSession session) {
         try {
             answerService.add(answerRequest);
-            model.addAttribute("questions", questionService.findAllByIsResolvedFalse());
-            return "index";
-        } catch (DataIntegrityViolationException e){
+            PlayerResponse playerFromSession = (PlayerResponse) session.getAttribute("player");
+            PlayerResponse playerResponse = playerService.findByName(playerFromSession.getName());
+            QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
+            PlayerResponse questionOwner = question.getPlayer();
+
+            model.addAttribute("playerName", playerResponse.getName());
+            model.addAttribute("playerId", playerResponse.getId());
+            model.addAttribute("question", question);
+            model.addAttribute("questionOwner", questionOwner);
+            model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
+            return "add-answer-form";
+        } catch (DataIntegrityViolationException e) {
             model.addAttribute("errorMessage", e.getMessage());
             QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
             PlayerResponse questionOwner = question.getPlayer();
@@ -64,7 +73,7 @@ public class AnswerMVCController {
             model.addAttribute("question", question);
             model.addAttribute("questionOwner", questionOwner);
             model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
-            if(answerRequest.getText() != null) {
+            if (answerRequest.getText() != null) {
                 model.addAttribute("previousAnswer", answerRequest.getText());
             }
             return "add-answer-form";
@@ -91,54 +100,54 @@ public class AnswerMVCController {
 
     @GetMapping("/update-page")
     public String goToUpdatePage(@RequestParam("answerId") Long answerId, Model model) {
-            AnswerResponse answerToUpdate = answerService.findById(answerId);
-            model.addAttribute("answer", answerToUpdate);
-            model.addAttribute("answerRequest", new AnswerRequest());
-            return "update-page";
-        }
+        AnswerResponse answerToUpdate = answerService.findById(answerId);
+        model.addAttribute("answer", answerToUpdate);
+        model.addAttribute("answerRequest", new AnswerRequest());
+        return "update-page";
+    }
 
-        @PostMapping("/update")
-        public String updateQuestion(@ModelAttribute AnswerRequest answerRequest, Model model, HttpSession session) {
-            try {
-                answerService.update(answerRequest);
-                PlayerResponse playerFromSession = (PlayerResponse) session.getAttribute("player");
-                PlayerResponse playerResponse = playerService.findByName(playerFromSession.getName());
-                QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
-                PlayerResponse questionOwner = question.getPlayer();
+    @PostMapping("/update")
+    public String updateQuestion(@ModelAttribute AnswerRequest answerRequest, Model model, HttpSession session) {
+        try {
+            answerService.update(answerRequest);
+            PlayerResponse playerFromSession = (PlayerResponse) session.getAttribute("player");
+            PlayerResponse playerResponse = playerService.findByName(playerFromSession.getName());
+            QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
+            PlayerResponse questionOwner = question.getPlayer();
 
-                model.addAttribute("playerName", playerResponse.getName());
-                model.addAttribute("playerId", playerResponse.getId());
-                model.addAttribute("question", question);
-                model.addAttribute("questionOwner", questionOwner);
-                model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
-                return "add-answer-form";
-            } catch (DataIntegrityViolationException e){
-                model.addAttribute("errorMessage", e.getMessage());
-                QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
-                PlayerResponse questionOwner = question.getPlayer();
-                model.addAttribute("playerId", answerRequest.getPlayerId());
-                model.addAttribute("question", question);
-                model.addAttribute("questionOwner", questionOwner);
-                model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
-                if(answerRequest.getText() != null) {
-                    model.addAttribute("answerRequest", answerRequest);
-                }
-                return "add-answer-form";
+            model.addAttribute("playerName", playerResponse.getName());
+            model.addAttribute("playerId", playerResponse.getId());
+            model.addAttribute("question", question);
+            model.addAttribute("questionOwner", questionOwner);
+            model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
+            return "add-answer-form";
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            QuestionResponse question = questionService.findById(answerRequest.getQuestionId());
+            PlayerResponse questionOwner = question.getPlayer();
+            model.addAttribute("playerId", answerRequest.getPlayerId());
+            model.addAttribute("question", question);
+            model.addAttribute("questionOwner", questionOwner);
+            model.addAttribute("answers", answerService.findByQuestion(answerRequest.getQuestionId()));
+            if (answerRequest.getText() != null) {
+                model.addAttribute("answerRequest", answerRequest);
             }
+            return "add-answer-form";
         }
-//
-//        @GetMapping("/delete/{id}")
-//        public String delete(@PathVariable("id") Long id, Model model, HttpSession session) {
-//            questionService.delete(id);
-//            PlayerResponse playerFromSession = getPlayerFromSession(session);
-//            model.addAttribute("questions", questionService.findAllByPlayer(playerFromSession.getId()));
-//            model.addAttribute("playerForQuestions", playerFromSession);
-//            if (Objects.equals(playerFromSession.getName(), "admin")) {
-//                model.addAttribute("questions", questionService.getAll());
-//                return "admin-all-questions";
-//            }
-//            model.addAttribute("questions", questionService.findAllByPlayer(playerFromSession.getId()));
-//            model.addAttribute("playerForQuestions", playerFromSession);
-//            return "questions-for-player";
-//        }
+    }
+
+    @GetMapping("/delete/{answerId}/{questionId}")
+    public String delete(@PathVariable("answerId") Long id, @PathVariable("questionId") Long questionId, Model model, HttpSession session) {
+        answerService.delete(id);
+        PlayerResponse playerResponse = (PlayerResponse) session.getAttribute("player");
+        QuestionResponse question = questionService.findById(questionId);
+        PlayerResponse questionOwner = question.getPlayer();
+
+        model.addAttribute("playerName", playerResponse.getName());
+        model.addAttribute("playerId", playerResponse.getId());
+        model.addAttribute("question", question);
+        model.addAttribute("questionOwner", questionOwner);
+        model.addAttribute("answers", answerService.findByQuestion(questionId));
+        return "add-answer-form";
+    }
 }
