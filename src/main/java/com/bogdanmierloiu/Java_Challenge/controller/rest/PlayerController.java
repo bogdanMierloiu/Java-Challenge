@@ -20,11 +20,6 @@ public class PlayerController implements CrudRequest<PlayerRequest, PlayerRespon
     @Override
     @PostMapping
     public ResponseEntity<?> add(@RequestBody PlayerRequest request) {
-//        try {
-//            return new ResponseEntity<>(playerService.add(request), HttpStatus.OK);
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.badRequest().body("Player name cannot be empty.");
-//
         return null;
     }
 
